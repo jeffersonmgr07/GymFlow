@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <title>Dashboard — GymFlow OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="app-page" data-page="admin-dashboard">
+  <div class="app-shell">
+    <aside class="sidebar" data-sidebar>
+      <div class="sidebar-head"><a class="brand" href="../index.html"><span class="brand-mark">GF</span><span class="brand-copy"><strong>GymFlow</strong><small>OS</small></span></a><button class="icon-btn sidebar-close" type="button" data-sidebar-close aria-label="Cerrar menú">×</button></div>
+      <div class="tenant-card"><span class="tenant-logo">IF</span><div><small>GIMNASIO</small><strong>Iron Factory</strong><span>Sede Principal</span></div><button type="button" title="Cambiar sede" data-demo-only>⌄</button></div>
+      <nav class="side-nav" aria-label="Menú administrativo">
+        <span class="nav-label">GENERAL</span>
+        <a class="active" href="dashboard.html"><i>⌂</i><span>Dashboard</span></a>
+        <a href="#" data-demo-only><i>♙</i><span>Socios</span><b>486</b></a>
+        <a href="#" data-demo-only><i>▦</i><span>Membresías</span></a>
+        <a href="#" data-demo-only><i>⌁</i><span>Control de acceso</span><em>12</em></a>
+        <span class="nav-label">NEGOCIO</span>
+        <a href="#" data-demo-only><i>▣</i><span>Caja & POS</span></a>
+        <a href="#" data-demo-only><i>↗</i><span>CRM & Ventas</span></a>
+        <a href="#" data-demo-only><i>◎</i><span>Entrenadores</span></a>
+        <a href="#" data-demo-only><i>◉</i><span>Clases</span></a>
+        <span class="nav-label">OPERACIÓN</span>
+        <a href="#" data-demo-only><i>⚙</i><span>Equipos</span></a>
+        <a href="#" data-demo-only><i>▤</i><span>Reportes</span></a>
+        <a href="#" data-demo-only><i>◇</i><span>Auditoría</span></a>
+        <a href="#" data-demo-only><i>⋯</i><span>Configuración</span></a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><span>JG</span><div><strong data-user-name>Jefferson García</strong><small data-user-role>Administrador</small></div><button type="button" data-demo-only>⋮</button></div></div>
+    </aside>
+
+    <div class="app-main">
+      <header class="app-header">
+        <div class="app-header-left"><button class="icon-btn mobile-sidebar-button" type="button" data-sidebar-open aria-label="Abrir menú">☰</button><div class="global-search"><span>⌕</span><input type="search" placeholder="Buscar socio, pago, acceso..." aria-label="Búsqueda global"><kbd>⌘ K</kbd></div></div>
+        <div class="app-header-actions"><button class="icon-btn" type="button" data-demo-only aria-label="Notificaciones">♢<b class="notification-dot"></b></button><button class="theme-mini-button" type="button" data-theme-cycle title="Cambiar tema"><i></i><span>Tema</span></button><div class="header-avatar">JG</div></div>
+      </header>
+
+      <main class="dashboard-content">
+        <div class="dashboard-heading"><div><span class="kicker">DOMINGO · 23 AGO</span><h1>Buenos días, Jefferson.</h1><p>Este es el resumen de <strong>Iron Factory · Sede Principal</strong>.</p></div><div class="heading-actions"><button class="btn btn-secondary" type="button" data-demo-only>Exportar</button><button class="btn btn-primary" type="button" data-demo-only>+ Nuevo socio</button></div></div>
+
+        <section class="kpi-grid" aria-label="Indicadores principales">
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">♙</span><em class="trend positive">↗ 8.4%</em></div><small>Socios activos</small><strong>486</strong><p><b>+23</b> este mes</p></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">₴</span><em class="trend positive">↗ 12.1%</em></div><small>Ingresos del mes</small><strong>S/ 28,420</strong><p>Meta: <b>78%</b> alcanzada</p></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">⌁</span><em class="trend neutral">Hoy</em></div><small>Check-ins</small><strong>193</strong><p>Hora pico <b>18:00</b></p></article>
+          <article class="kpi-card warning-card"><div class="kpi-top"><span class="kpi-icon">!</span><em class="trend warning">Atención</em></div><small>Por vencer</small><strong>34</strong><p>Próximos <b>7 días</b></p></article>
+        </section>
+
+        <section class="dashboard-grid primary-dashboard-grid">
+          <article class="panel revenue-panel">
+            <div class="panel-head"><div><span class="panel-kicker">RENDIMIENTO</span><h2>Ingresos cobrados</h2></div><select aria-label="Periodo de ingresos"><option>Últimos 7 meses</option><option>Últimos 30 días</option></select></div>
+            <div class="revenue-summary"><strong>S/ 148,640</strong><span>↗ 14.8% vs. periodo anterior</span></div>
+            <div class="dashboard-chart" role="img" aria-label="Gráfico demo de ingresos mensuales"><div class="grid-lines"><i></i><i></i><i></i><i></i></div><svg viewBox="0 0 700 210" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="areaGradient" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="var(--color-accent)" stop-opacity=".32"/><stop offset="100%" stop-color="var(--color-accent)" stop-opacity="0"/></linearGradient></defs><path class="area-path" d="M0,165 C65,145 80,120 140,130 S225,105 280,112 S365,62 420,82 S505,72 560,45 S645,52 700,22 L700,210 L0,210 Z"/><path class="line-path" d="M0,165 C65,145 80,120 140,130 S225,105 280,112 S365,62 420,82 S505,72 560,45 S645,52 700,22"/></svg><div class="chart-labels"><span>Feb</span><span>Mar</span><span>Abr</span><span>May</span><span>Jun</span><span>Jul</span><span>Ago</span></div></div>
+          </article>
+
+          <article class="panel access-panel">
+            <div class="panel-head"><div><span class="panel-kicker">EN TIEMPO REAL</span><h2>Últimos accesos</h2></div><button class="text-button" type="button" data-demo-only>Ver todos →</button></div>
+            <div class="access-list" data-access-list></div>
+          </article>
+        </section>
+
+        <section class="dashboard-grid secondary-dashboard-grid">
+          <article class="panel plan-panel"><div class="panel-head"><div><span class="panel-kicker">MEMBRESÍAS</span><h2>Distribución por plan</h2></div><button class="icon-btn" type="button" data-demo-only>⋯</button></div><div class="donut-wrap"><div class="donut-chart"><div class="donut-center"><strong>486</strong><span>activos</span></div></div><div class="legend"><p><i class="l1"></i><span>Full</span><b>38%</b></p><p><i class="l2"></i><span>Flex 14</span><b>27%</b></p><p><i class="l3"></i><span>Plus</span><b>21%</b></p><p><i class="l4"></i><span>Otros</span><b>14%</b></p></div></div></article>
+
+          <article class="panel retention-panel"><div class="panel-head"><div><span class="panel-kicker">RETENCIÓN</span><h2>Salud de socios</h2></div><button class="text-button" type="button" data-demo-only>Detalle →</button></div><div class="retention-score"><div class="score-ring"><span><strong>84</strong><small>/100</small></span></div><div><strong>Buena retención</strong><p>La frecuencia de asistencia creció 6% este mes.</p><div class="risk-line"><span><i></i> Bajo</span><b>392</b></div><div class="risk-line"><span><i class="medium"></i> Medio</span><b>61</b></div><div class="risk-line"><span><i class="high"></i> Alto</span><b>33</b></div></div></div></article>
+
+          <article class="panel tasks-panel"><div class="panel-head"><div><span class="panel-kicker">HOY</span><h2>Alertas operativas</h2></div><span class="count-badge">4</span></div><div class="task-list"><button type="button" data-demo-only><span class="task-icon warning">!</span><div><strong>34 membresías por vencer</strong><small>Próximos 7 días</small></div><b>→</b></button><button type="button" data-demo-only><span class="task-icon danger">₴</span><div><strong>S/ 2,380 en deuda</strong><small>18 socios pendientes</small></div><b>→</b></button><button type="button" data-demo-only><span class="task-icon">⚙</span><div><strong>2 equipos en mantenimiento</strong><small>Revisar órdenes activas</small></div><b>→</b></button></div></article>
+        </section>
+
+        <section class="demo-phase-note"><span>FASE 1 · PROTOTIPO</span><p>Esta pantalla utiliza datos ficticios en JavaScript. Los módulos todavía no persisten información ni validan permisos en backend.</p><a href="../docs/fase-1.md">Ver alcance técnico →</a></section>
+      </main>
+    </div>
+  </div>
+
+  <div class="sidebar-overlay" data-sidebar-overlay></div>
+  <div class="toast-container" aria-live="polite" data-toast-container></div>
+  <script src="../assets/js/demo-data.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

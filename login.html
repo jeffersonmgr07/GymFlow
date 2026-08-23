@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <title>Ingresar — GymFlow OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="auth-page" data-page="login">
+  <main class="auth-shell">
+    <section class="auth-panel auth-brand-panel">
+      <a class="brand" href="index.html"><span class="brand-mark">GF</span><span class="brand-copy"><strong>GymFlow</strong><small>OS</small></span></a>
+      <div class="auth-message"><span class="kicker">OPERACIÓN CONECTADA</span><h1>Más que un sistema.<br><span>El centro de tu gimnasio.</span></h1><p>Una sola plataforma para conectar socios, sedes, accesos, caja y equipo.</p></div>
+      <div class="auth-stats"><article><strong>486</strong><small>socios activos</small></article><article><strong>2</strong><small>sedes demo</small></article><article><strong>99.2%</strong><small>accesos trazables</small></article></div>
+      <small class="auth-note">Datos completamente ficticios para demostración.</small>
+    </section>
+
+    <section class="auth-panel auth-form-panel">
+      <div class="auth-form-wrap">
+        <div class="mobile-auth-brand"><a class="brand" href="index.html"><span class="brand-mark">GF</span><span class="brand-copy"><strong>GymFlow</strong><small>OS</small></span></a></div>
+        <div class="auth-heading"><span class="kicker">BIENVENIDO</span><h2>Inicia sesión</h2><p>En esta Fase 1 el acceso es solo una simulación de interfaz.</p></div>
+        <div class="demo-alert"><strong>Modo demostración</strong><span>No uses contraseñas reales. El backend todavía no está conectado.</span></div>
+        <form class="auth-form" data-login-form>
+          <label>Email<span><input type="email" name="email" autocomplete="email" value="admin@gymflow.demo" required></span></label>
+          <label>Contraseña<span class="password-field"><input type="password" name="password" autocomplete="current-password" value="Demo1234" required><button type="button" data-toggle-password aria-label="Mostrar contraseña">◉</button></span></label>
+          <div class="form-row"><label class="check"><input type="checkbox" checked><span>Recordarme</span></label><a href="#" data-demo-only>¿Olvidaste tu contraseña?</a></div>
+          <button class="btn btn-primary btn-lg full" type="submit">Ingresar al dashboard <span>→</span></button>
+        </form>
+        <div class="demo-divider"><span>o usa un perfil demo</span></div>
+        <div class="demo-users" data-demo-users></div>
+        <p class="auth-return"><a href="index.html">← Volver al sitio público</a></p>
+      </div>
+    </section>
+  </main>
+  <div class="toast-container" aria-live="polite" data-toast-container></div>
+  <script src="assets/js/demo-data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
