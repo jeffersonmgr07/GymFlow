@@ -9,7 +9,7 @@
  */
 window.GYMFLOW_CONFIG = Object.freeze({
   API_MODE: 'demo', // 'demo' | 'apps-script'
-  API_BASE_URL: '', // Ej.: https://script.google.com/macros/s/DEPLOYMENT_ID/exec
+  API_BASE_URL: 'https://script.google.com/macros/s/AKfycby-S45qvBcK0h2X9LDcc3fFuLQr24-xmDzPq4btA6pO9EZrqYM-ceNoIiUcbCtJVlOnug/exec', // Ej.: https://script.google.com/macros/s/DEPLOYMENT_ID/exec
   ENABLE_BACKEND_DEMO_LOGIN: false,
   REQUEST_TIMEOUT_MS: 12000,
   APP_VERSION: '0.2.0'
