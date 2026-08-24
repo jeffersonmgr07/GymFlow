@@ -1,10 +1,10 @@
 # Fase 1 — Núcleo SaaS
 
-## Estado de esta entrega
+## Estado de la entrega 0.2.0
 
-**Prototipo frontend: completado parcialmente.**
+**Núcleo backend inicial implementado. La Fase 1 todavía no está cerrada para producción.**
 
-La especificación maestra define para Fase 1:
+La especificación maestra define:
 
 - multi-gimnasio;
 - sedes;
@@ -17,43 +17,54 @@ La especificación maestra define para Fase 1:
 - marca blanca;
 - auditoría base.
 
-## Incluido ahora
+## Completado
 
 - [x] Sitio público inicial.
-- [x] Dashboard administrativo inicial.
-- [x] Diseño responsive.
-- [x] Sidebar administrativo.
-- [x] Motor de temas basado en tokens CSS.
-- [x] Simulación de gimnasio y sede activos.
-- [x] Simulación de perfiles demo.
-- [x] Simulación visual de sesión.
-- [x] KPIs ficticios.
-- [x] Accesos ficticios.
-- [x] Estado visual de alertas.
-- [x] Documentación base.
+- [x] Login demo.
+- [x] Dashboard administrativo.
+- [x] Dashboard inicial Super Admin SaaS.
+- [x] Responsive.
+- [x] Motor de temas.
+- [x] ApiClient con fallback estático.
+- [x] Contrato API uniforme.
+- [x] Spreadsheet maestro de plataforma mediante setup.
+- [x] Spreadsheet independiente por gimnasio mediante setup.
+- [x] IDs inmutables independientes de filas.
+- [x] `TenantService`.
+- [x] `BranchService`.
+- [x] `UserService`.
+- [x] `SessionService`.
+- [x] `RbacService`.
+- [x] `AuditService`.
+- [x] `DashboardService` demo.
+- [x] Sesiones expirables y revocables.
+- [x] Hash de token en almacenamiento.
+- [x] Resolución de tenant y sede desde sesión.
+- [x] Auditoría inicial append-only en servicios.
+- [x] Setup idempotente.
+- [x] Dos tenants demo físicamente separados.
+- [x] Smoke tests de aislamiento básicos.
+- [x] Documentación de arquitectura, seguridad, despliegue y pruebas.
 
-## Pendiente para completar Fase 1 funcional
+## Pendiente para cerrar Fase 1 de producción
 
-- [ ] Spreadsheet maestro de plataforma.
-- [ ] Spreadsheet independiente por gimnasio.
-- [ ] IDs UUID/inmutables.
-- [ ] API uniforme `{ ok, data, message, errorCode, correlationId }`.
-- [ ] `AuthService`.
-- [ ] `TenantService`.
-- [ ] `BranchService`.
-- [ ] `UserService`.
-- [ ] RBAC en backend.
-- [ ] Sesiones expirables y revocables.
-- [ ] Auditoría append-only.
-- [ ] Resolución de tenant y sede desde sesión.
-- [ ] Pruebas de aislamiento cruzado.
-- [ ] Conexión del dashboard con API real.
-- [ ] Super Admin SaaS inicial.
+- [ ] Firebase Authentication / Google Identity / IdP definitivo.
+- [ ] Deshabilitar y retirar login demo de entornos reales.
+- [ ] CRUD de gimnasios desde Super Admin.
+- [ ] CRUD de sedes.
+- [ ] CRUD de usuarios.
+- [ ] Editor de asignación de roles y permisos.
+- [ ] Configuración persistente completa de marca blanca.
+- [ ] Soporte SaaS temporal y auditado.
+- [ ] Suspensión/reactivación de tenant.
+- [ ] Rate limiting.
+- [ ] Más pruebas de acceso cruzado.
+- [ ] Backups/restauración operativos.
+
+## Decisión de seguridad
+
+No se implementa autenticación propia por contraseña. El backend demo solo existe para validar la arquitectura con datos ficticios. Producción debe delegar identidad a un proveedor seguro.
 
 ## Criterio para pasar a Fase 2
 
-No se debe comenzar socios y membresías con datos reales hasta que exista aislamiento de tenant probado y autorización de backend.
-
-## Datos demo
-
-Todos los nombres, correos, cifras, accesos, indicadores y operaciones del frontend son ficticios y solo sirven para diseño/pruebas.
+Podemos comenzar a diseñar socios y membresías con datos ficticios mientras terminamos los CRUD de Fase 1, pero no deben cargarse datos reales de socios hasta tener autenticación de producción y pruebas completas de aislamiento.

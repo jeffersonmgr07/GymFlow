@@ -2,93 +2,59 @@
 
 ## Identificación
 
-- Producto: GymFlow OS (nombre provisional)
-- Versión de esta entrega: 0.1.0
-- Fase: 1 — Núcleo SaaS, prototipo frontend
+- Producto: GymFlow OS
+- Versión: 0.2.0
+- Fase: 1 — Núcleo SaaS
 - Mercado inicial: Perú y Latinoamérica
-- Arquitectura objetivo: SaaS multitenant y multisede
+- Arquitectura: SaaS multitenant y multisede
 
-## Objetivo de la versión 0.1.0
+## Incremento 0.2.0
 
-Construir una base visual y estructural que permita validar identidad, navegación, responsive, dashboard administrativo y motor de temas antes de conectar persistencia y autenticación real.
+La versión 0.1.0 era un prototipo frontend. La 0.2.0 incorpora la primera capa backend real sobre Google Apps Script y Google Sheets, conservando el modo estático para GitHub Pages.
 
-## Stack actual
+## Frontend
 
 - HTML5
 - CSS3
 - JavaScript Vanilla
-- LocalStorage exclusivamente para preferencias y sesión ficticia de demostración
-- GitHub Pages / Cloudflare Pages como hosting estático compatible
+- `config.js` para modo demo/API
+- `api-client.js` como adaptador HTTP
+- `app.js` para comportamiento y sincronización de UI
+- `sessionStorage` para token de sesión API
+- `localStorage` solo para preferencias y sesión ficticia del modo estático
 
-## Archivos principales
+## Backend
 
-- `index.html`: sitio público y presentación del producto.
-- `login.html`: experiencia de acceso demo.
-- `admin/dashboard.html`: dashboard administrativo demo.
-- `assets/css/styles.css`: design tokens, componentes y responsive.
-- `assets/js/demo-data.js`: datos completamente ficticios.
-- `assets/js/app.js`: temas, navegación, simulación de login, sidebar y render de accesos.
+- Google Apps Script V8
+- router por acción;
+- respuestas uniformes;
+- repositorio genérico;
+- RBAC;
+- sesión opaca;
+- tenant/sede desde sesión;
+- auditoría;
+- setup idempotente;
+- smoke tests.
 
-## Design tokens
+## Almacenamiento piloto
 
-La UI usa variables CSS para cumplir con la estrategia de marca blanca:
+1 Spreadsheet de plataforma + 1 Spreadsheet por tenant.
 
-- `--color-primary`
-- `--color-secondary`
-- `--color-accent`
-- `--color-background`
-- `--color-surface`
-- `--color-surface-2`
-- `--color-text`
-- `--color-muted`
-- `--color-border`
-- `--color-success`
-- `--color-warning`
-- `--color-danger`
-- `--font-heading`
-- `--font-body`
-- `--radius`
-- `--shadow`
-- `--density`
+Datos demo creados:
 
-## Temas implementados en demo
-
-1. Iron Yellow — predeterminado.
-2. Neon Cyber.
-3. Red Power.
-4. Ocean Pulse.
-
-Pendientes: Aura Pink y Minimal Stone.
+- Iron Factory: 2 sedes.
+- Ocean Fit Club: 1 sede.
+- Super Admin SaaS.
+- propietario/administrador;
+- gerente;
+- recepción/caja.
 
 ## Seguridad
 
-Esta entrega no contiene backend. Por lo tanto:
+El token claro de sesión se entrega al navegador y se conserva en `sessionStorage`; Sheets almacena solo `SHA-256(token)`. Las sesiones expiran y pueden revocarse.
 
-- no existe autenticación real;
-- no existe autorización real;
-- no existe aislamiento real de tenant;
-- no existen secretos;
-- no se persisten datos de negocio;
-- no debe usarse con información real.
+No hay contraseñas reales ni secretos en el repositorio.
 
-`localStorage` se utiliza únicamente para demostrar la experiencia visual de una sesión.
+## Restricción consciente
 
-## Arquitectura objetivo siguiente
-
-```text
-Frontend estático
-  ↓ HTTPS
-Apps Script Web App / API
-  ↓
-Controllers
-  ↓
-Domain Services
-  ↓
-Repositories
-  ↓
-Spreadsheet maestro + Spreadsheet por tenant
-```
-
-## Decisión técnica
-
-No se incorporó framework frontend en esta fase. El objetivo es mantener una base liviana, fácil de desplegar y compatible con la especificación que prioriza HTML, CSS y JavaScript Vanilla.
+`auth.demoLogin` es solo un mecanismo de laboratorio. No debe utilizarse con información real. El cierre de Fase 1 requiere proveedor de identidad externo.

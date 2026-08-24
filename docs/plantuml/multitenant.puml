@@ -1,0 +1,33 @@
+@startuml
+rectangle "GymFlow OS" {
+  database "Plataforma" as P
+  database "Iron Factory" as A
+  database "Ocean Fit Club" as B
+}
+
+P : Tenants
+P : Roles
+P : Permissions
+P : Sessions
+
+A : Branches
+A : Users
+A : UserRoles
+A : AuditLogs
+
+B : Branches
+B : Users
+B : UserRoles
+B : AuditLogs
+
+P --> A : tenant_demo_iron_factory
+P --> B : tenant_demo_ocean_fit
+note bottom of A
+Una sesión Iron Factory
+solo resuelve este almacenamiento.
+end note
+note bottom of B
+Una sesión Ocean Fit
+solo resuelve este almacenamiento.
+end note
+@enduml

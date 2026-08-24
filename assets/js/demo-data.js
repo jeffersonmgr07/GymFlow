@@ -1,6 +1,7 @@
 window.GYMFLOW_DEMO = {
   users: [
-    { id: 'usr_demo_admin', initials: 'JG', name: 'Jefferson García', role: 'Administrador', email: 'admin@gymflow.demo', destination: 'admin/dashboard.html' },
+    { id: 'usr_platform_superadmin', initials: 'SA', name: 'Super Admin SaaS', role: 'Super Admin SaaS', email: 'superadmin@gymflow.demo', destination: 'super-admin/dashboard.html' },
+    { id: 'usr_demo_admin', initials: 'JG', name: 'Diego Salazar', role: 'Administrador', email: 'admin@gymflow.demo', destination: 'admin/dashboard.html' },
     { id: 'usr_demo_manager', initials: 'CM', name: 'Carla Mendoza', role: 'Gerente de sede', email: 'gerente@gymflow.demo', destination: 'admin/dashboard.html' },
     { id: 'usr_demo_cashier', initials: 'LR', name: 'Luis Rojas', role: 'Recepción / Caja', email: 'caja@gymflow.demo', destination: 'admin/dashboard.html' }
   ],

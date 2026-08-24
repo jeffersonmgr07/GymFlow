@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080808">
+  <title>Super Admin SaaS — GymFlow OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="app-page" data-page="super-admin-dashboard">
+  <div class="app-shell">
+    <aside class="sidebar" data-sidebar>
+      <div class="sidebar-head"><a class="brand" href="../index.html"><span class="brand-mark">GF</span><span class="brand-copy"><strong>GymFlow</strong><small>OS</small></span></a><button class="icon-btn sidebar-close" type="button" data-sidebar-close aria-label="Cerrar menú">×</button></div>
+      <div class="tenant-card"><span class="tenant-logo">SA</span><div><small>PLATAFORMA</small><strong>GymFlow OS</strong><span>Control SaaS</span></div></div>
+      <nav class="side-nav" aria-label="Menú Super Admin">
+        <span class="nav-label">PLATAFORMA</span>
+        <a class="active" href="dashboard.html"><i>⌂</i><span>Dashboard SaaS</span></a>
+        <a href="#" data-demo-only><i>▦</i><span>Gimnasios</span></a>
+        <a href="#" data-demo-only><i>⌘</i><span>Planes SaaS</span></a>
+        <a href="#" data-demo-only><i>◇</i><span>Soporte</span></a>
+        <a href="#" data-demo-only><i>▤</i><span>Auditoría técnica</span></a>
+        <a href="#" data-demo-only><i>⚙</i><span>Configuración</span></a>
+      </nav>
+      <div class="sidebar-footer"><div class="sidebar-user"><span data-user-initials>SA</span><div><strong data-user-name>Super Admin SaaS</strong><small data-user-role>Super Admin SaaS</small></div><button type="button" data-logout title="Cerrar sesión" aria-label="Cerrar sesión">↪</button></div></div>
+    </aside>
+
+    <div class="app-main">
+      <header class="app-header">
+        <div class="app-header-left"><button class="icon-btn mobile-sidebar-button" type="button" data-sidebar-open aria-label="Abrir menú">☰</button><div class="global-search"><span>⌕</span><input type="search" placeholder="Buscar gimnasio..." aria-label="Búsqueda global"><kbd>⌘ K</kbd></div></div>
+        <div class="app-header-actions"><button class="theme-mini-button" type="button" data-theme-cycle><i></i><span>Tema</span></button><div class="header-avatar">SA</div></div>
+      </header>
+
+      <main class="dashboard-content">
+        <div class="dashboard-heading"><div><span class="kicker">NÚCLEO SAAS · FASE 1</span><h1>Control de plataforma.</h1><p>Vista del Super Admin sin acceso automático a información sensible de los gimnasios.</p></div><div class="heading-actions"><button class="btn btn-primary" type="button" data-demo-only>+ Nuevo gimnasio</button></div></div>
+
+        <section class="kpi-grid">
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">▦</span><em class="trend positive">Activos</em></div><small>Gimnasios</small><strong data-tenant-count>2</strong><p>Tenants aislados</p></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">⌂</span><em class="trend neutral">Demo</em></div><small>Sedes</small><strong>3</strong><p>Configuradas en piloto</p></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">◇</span><em class="trend positive">RBAC</em></div><small>Roles base</small><strong>13</strong><p>Plataforma + tenant</p></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">✓</span><em class="trend positive">API</em></div><small>Contrato</small><strong>0.2</strong><p>Backend preparado</p></article>
+        </section>
+
+        <section class="dashboard-grid primary-dashboard-grid super-grid">
+          <article class="panel">
+            <div class="panel-head"><div><span class="panel-kicker">TENANTS</span><h2>Gimnasios registrados</h2></div><button class="text-button" data-demo-only>Gestionar →</button></div>
+            <div class="platform-table" data-platform-tenants>
+              <div class="platform-row"><span class="tenant-logo">IF</span><div><strong>Iron Factory</strong><small>iron-factory</small></div><span class="status-chip status-active">ACTIVE</span><span>iron</span></div>
+              <div class="platform-row"><span class="tenant-logo">OF</span><div><strong>Ocean Fit Club</strong><small>ocean-fit-club</small></div><span class="status-chip status-active">ACTIVE</span><span>ocean</span></div>
+            </div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><span class="panel-kicker">SEGURIDAD</span><h2>Principios activos</h2></div></div>
+            <div class="security-check-list">
+              <p><span>✓</span><strong>Spreadsheet separado por tenant</strong><small>Aislamiento físico para el piloto.</small></p>
+              <p><span>✓</span><strong>Tenant desde sesión</strong><small>No se confía en tenant_id del navegador.</small></p>
+              <p><span>✓</span><strong>RBAC en backend</strong><small>Los permisos se validan por acción.</small></p>
+              <p><span>✓</span><strong>Auditoría append-only</strong><small>Eventos críticos conservan trazabilidad.</small></p>
+            </div>
+          </article>
+        </section>
+
+        <section class="demo-phase-note"><span>VERSIÓN 0.2.0</span><p>La lista de gimnasios puede provenir del API real al activar Apps Script. Los botones de gestión siguen bloqueados hasta completar los CRUD administrativos.</p><a href="../docs/fase-1.md">Ver alcance →</a></section>
+      </main>
+    </div>
+  </div>
+  <div class="sidebar-overlay" data-sidebar-overlay></div>
+  <div class="toast-container" aria-live="polite" data-toast-container></div>
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/demo-data.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

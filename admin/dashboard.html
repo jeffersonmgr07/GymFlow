@@ -14,7 +14,7 @@
   <div class="app-shell">
     <aside class="sidebar" data-sidebar>
       <div class="sidebar-head"><a class="brand" href="../index.html"><span class="brand-mark">GF</span><span class="brand-copy"><strong>GymFlow</strong><small>OS</small></span></a><button class="icon-btn sidebar-close" type="button" data-sidebar-close aria-label="Cerrar menú">×</button></div>
-      <div class="tenant-card"><span class="tenant-logo">IF</span><div><small>GIMNASIO</small><strong>Iron Factory</strong><span>Sede Principal</span></div><button type="button" title="Cambiar sede" data-demo-only>⌄</button></div>
+      <div class="tenant-card"><span class="tenant-logo">IF</span><div><small>GIMNASIO</small><strong data-tenant-name>Iron Factory</strong><span data-branch-name>Sede Principal</span></div><button type="button" title="Cambiar sede" data-demo-only>⌄</button></div>
       <nav class="side-nav" aria-label="Menú administrativo">
         <span class="nav-label">GENERAL</span>
         <a class="active" href="dashboard.html"><i>⌂</i><span>Dashboard</span></a>
@@ -32,7 +32,7 @@
         <a href="#" data-demo-only><i>◇</i><span>Auditoría</span></a>
         <a href="#" data-demo-only><i>⋯</i><span>Configuración</span></a>
       </nav>
-      <div class="sidebar-footer"><div class="sidebar-user"><span>JG</span><div><strong data-user-name>Jefferson García</strong><small data-user-role>Administrador</small></div><button type="button" data-demo-only>⋮</button></div></div>
+      <div class="sidebar-footer"><div class="sidebar-user"><span data-user-initials>JG</span><div><strong data-user-name>Administrador Demo</strong><small data-user-role>Administrador</small></div><button type="button" data-logout title="Cerrar sesión" aria-label="Cerrar sesión">↪</button></div></div>
     </aside>
 
     <div class="app-main">
@@ -42,13 +42,13 @@
       </header>
 
       <main class="dashboard-content">
-        <div class="dashboard-heading"><div><span class="kicker">DOMINGO · 23 AGO</span><h1>Buenos días, Jefferson.</h1><p>Este es el resumen de <strong>Iron Factory · Sede Principal</strong>.</p></div><div class="heading-actions"><button class="btn btn-secondary" type="button" data-demo-only>Exportar</button><button class="btn btn-primary" type="button" data-demo-only>+ Nuevo socio</button></div></div>
+        <div class="dashboard-heading"><div><span class="kicker">DOMINGO · 23 AGO</span><h1>Buenos días, <span data-greeting-name>Diego</span>.</h1><p>Este es el resumen de <strong><span data-tenant-name>Iron Factory</span> · <span data-branch-name>Sede Principal</span></strong>.</p></div><div class="heading-actions"><button class="btn btn-secondary" type="button" data-demo-only>Exportar</button><button class="btn btn-primary" type="button" data-demo-only>+ Nuevo socio</button></div></div>
 
         <section class="kpi-grid" aria-label="Indicadores principales">
-          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">♙</span><em class="trend positive">↗ 8.4%</em></div><small>Socios activos</small><strong>486</strong><p><b>+23</b> este mes</p></article>
-          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">₴</span><em class="trend positive">↗ 12.1%</em></div><small>Ingresos del mes</small><strong>S/ 28,420</strong><p>Meta: <b>78%</b> alcanzada</p></article>
-          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">⌁</span><em class="trend neutral">Hoy</em></div><small>Check-ins</small><strong>193</strong><p>Hora pico <b>18:00</b></p></article>
-          <article class="kpi-card warning-card"><div class="kpi-top"><span class="kpi-icon">!</span><em class="trend warning">Atención</em></div><small>Por vencer</small><strong>34</strong><p>Próximos <b>7 días</b></p></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">♙</span><em class="trend positive">↗ 8.4%</em></div><small>Socios activos</small><strong data-kpi="activeMembers">486</strong><p><b>+23</b> este mes</p></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">₴</span><em class="trend positive">↗ 12.1%</em></div><small>Ingresos del mes</small><strong data-kpi="monthRevenue">S/ 28,420</strong><p>Meta: <b>78%</b> alcanzada</p></article>
+          <article class="kpi-card"><div class="kpi-top"><span class="kpi-icon">⌁</span><em class="trend neutral">Hoy</em></div><small>Check-ins</small><strong data-kpi="checkinsToday">193</strong><p>Hora pico <b>18:00</b></p></article>
+          <article class="kpi-card warning-card"><div class="kpi-top"><span class="kpi-icon">!</span><em class="trend warning">Atención</em></div><small>Por vencer</small><strong data-kpi="expiring7d">34</strong><p>Próximos <b>7 días</b></p></article>
         </section>
 
         <section class="dashboard-grid primary-dashboard-grid">
@@ -72,13 +72,15 @@
           <article class="panel tasks-panel"><div class="panel-head"><div><span class="panel-kicker">HOY</span><h2>Alertas operativas</h2></div><span class="count-badge">4</span></div><div class="task-list"><button type="button" data-demo-only><span class="task-icon warning">!</span><div><strong>34 membresías por vencer</strong><small>Próximos 7 días</small></div><b>→</b></button><button type="button" data-demo-only><span class="task-icon danger">₴</span><div><strong>S/ 2,380 en deuda</strong><small>18 socios pendientes</small></div><b>→</b></button><button type="button" data-demo-only><span class="task-icon">⚙</span><div><strong>2 equipos en mantenimiento</strong><small>Revisar órdenes activas</small></div><b>→</b></button></div></article>
         </section>
 
-        <section class="demo-phase-note"><span>FASE 1 · PROTOTIPO</span><p>Esta pantalla utiliza datos ficticios en JavaScript. Los módulos todavía no persisten información ni validan permisos en backend.</p><a href="../docs/fase-1.md">Ver alcance técnico →</a></section>
+        <section class="demo-phase-note"><span>FASE 1 · PROTOTIPO</span><p>Por defecto esta pantalla usa datos ficticios. Al activar el API, el contexto tenant/sede y los KPI de Fase 1 se obtienen del backend con sesión y RBAC.</p><a href="../docs/fase-1.md">Ver alcance técnico →</a></section>
       </main>
     </div>
   </div>
 
   <div class="sidebar-overlay" data-sidebar-overlay></div>
   <div class="toast-container" aria-live="polite" data-toast-container></div>
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/api-client.js"></script>
   <script src="../assets/js/demo-data.js"></script>
   <script src="../assets/js/app.js"></script>
 </body>

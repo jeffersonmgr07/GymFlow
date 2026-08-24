@@ -1,0 +1,21 @@
+@startuml
+actor Usuario
+participant Frontend
+participant ApiClient
+participant AuthService
+participant SessionService
+database Plataforma
+database Tenant
+
+Usuario -> Frontend : Selecciona perfil demo
+Frontend -> ApiClient : demoLogin(email)
+ApiClient -> AuthService : auth.demoLogin
+AuthService -> Plataforma : resolver DemoIdentity
+AuthService -> Tenant : leer usuario y roles
+AuthService -> SessionService : crear sesión
+SessionService -> Plataforma : guardar hash(token)
+SessionService --> AuthService : token opaco + expiración
+AuthService --> ApiClient : usuario + tenant + permisos + token
+ApiClient -> Frontend : guardar token en sessionStorage
+Frontend --> Usuario : dashboard según rol
+@enduml

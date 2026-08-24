@@ -1,48 +1,93 @@
-# GymFlow OS — Fase 1
+# GymFlow OS — Fase 1 / Versión 0.2.0
 
-Prototipo frontend navegable del SaaS multigimnasio definido en el Prompt Maestro Unificado.
+Base profesional del SaaS multigimnasio definido en el Prompt Maestro Unificado.
 
-## Qué incluye esta entrega
+## Estado
 
-- Sitio público `index.html`.
-- Login demostrativo `login.html`.
-- Dashboard administrativo `admin/dashboard.html`.
-- Motor de temas con 4 variantes iniciales: Iron, Cyber, Red y Ocean.
-- Navegación responsive y sidebar móvil.
-- Datos ficticios centralizados en `assets/js/demo-data.js`.
-- Simulación local de sesión con `localStorage` únicamente para la demo visual.
-- Documentación inicial de Fase 1.
+La entrega contiene frontend navegable **y** el primer núcleo backend de Fase 1.
 
-## Importante
+El frontend continúa funcionando sin backend para poder publicarse inmediatamente en GitHub Pages. Cuando se configura Apps Script, el login demo opcional crea sesiones de servidor y los dashboards pueden consumir datos del tenant autenticado.
 
-Esta versión **NO implementa autenticación real ni seguridad de producción**. El formulario de acceso es una simulación de UX para GitHub Pages. No debe usarse con datos reales ni contraseñas reales.
+## Vistas disponibles
 
-La seguridad real será implementada en backend con sesión, tenant, sede y RBAC antes de operar con información real.
+- `index.html` — sitio público.
+- `login.html` — acceso demo.
+- `admin/dashboard.html` — administración del gimnasio.
+- `super-admin/dashboard.html` — administración de plataforma SaaS.
 
-## Probar localmente
+## Arquitectura
 
-Puedes abrir `index.html` directamente o levantar un servidor local:
+```text
+Frontend estático
+  ↓
+ApiClient
+  ↓
+Apps Script Web App
+  ↓
+Router / Controllers
+  ↓
+Auth + Session + RBAC
+  ↓
+Services
+  ↓
+Repository
+  ↓
+Spreadsheet plataforma + Spreadsheet por tenant
+```
+
+## Probar solo frontend
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Luego visita:
+Abre `http://localhost:8080/`.
 
-```text
-http://localhost:8080/
+## Backend
+
+Los archivos están en `apps-script/`.
+
+1. Crea/vincula un proyecto Apps Script.
+2. Sube los archivos `.gs` y `appsscript.json`.
+3. Ejecuta `setupGymFlowPhase1()`.
+4. Ejecuta `runPhase1SmokeTests()`.
+5. Despliega como Web App.
+6. Comprueba `?action=system.health`.
+7. Configura `assets/js/config.js`.
+
+Guía completa: `docs/despliegue.md`.
+
+## Configuración frontend
+
+Por defecto:
+
+```js
+API_MODE: 'demo'
+API_BASE_URL: ''
+ENABLE_BACKEND_DEMO_LOGIN: false
 ```
 
-## Publicar en GitHub Pages
+Para conectar el backend demo:
 
-1. Crea un repositorio, por ejemplo `gymflow-os`.
-2. Sube el contenido de esta carpeta a la raíz del repositorio.
-3. En GitHub abre **Settings → Pages**.
-4. En **Build and deployment**, selecciona **Deploy from a branch**.
-5. Selecciona la rama `main` y la carpeta `/ (root)`.
-6. Guarda los cambios.
+```js
+API_MODE: 'apps-script'
+API_BASE_URL: 'https://script.google.com/macros/s/.../exec'
+ENABLE_BACKEND_DEMO_LOGIN: true
+```
 
-## Estructura actual
+La URL del Web App no es un secreto. No coloques API keys, contraseñas, Spreadsheet IDs privados ni tokens en `config.js`.
+
+## Perfiles demo
+
+- `superadmin@gymflow.demo`
+- `admin@gymflow.demo`
+- `gerente@gymflow.demo`
+- `caja@gymflow.demo`
+- `owner@oceanfit.demo` (backend seed)
+
+La contraseña visible en `login.html` no se valida y no debe confundirse con autenticación de producción.
+
+## Estructura
 
 ```text
 gymflow-os/
@@ -50,26 +95,41 @@ gymflow-os/
 ├── login.html
 ├── admin/
 │   └── dashboard.html
+├── super-admin/
+│   └── dashboard.html
 ├── assets/
-│   ├── css/
-│   │   └── styles.css
+│   ├── css/styles.css
 │   └── js/
-│       ├── app.js
-│       └── demo-data.js
+│       ├── config.js
+│       ├── api-client.js
+│       ├── demo-data.js
+│       └── app.js
+├── apps-script/
+│   ├── 00_Config.gs ... 99_Tests.gs
+│   ├── appsscript.json
+│   └── .clasp.example.json
+├── shared/contracts/
+│   └── api-contract.md
 ├── docs/
-│   ├── ficha-tecnica.md
-│   ├── fase-1.md
-│   └── changelog.md
-├── .gitignore
-└── README.md
+│   ├── arquitectura.md
+│   ├── modelo-datos.md
+│   ├── seguridad.md
+│   ├── despliegue.md
+│   ├── pruebas.md
+│   ├── manuales/
+│   ├── capacitacion/
+│   └── plantuml/
+└── .gitignore
 ```
 
-## Próximo incremento recomendado
+## Qué NO está listo para producción
 
-1. Definir contrato de API.
-2. Crear backend Apps Script por capas.
-3. Crear Spreadsheet maestro de plataforma y Spreadsheet por gimnasio.
-4. Implementar `TenantService`, `BranchService`, `UserService`, `AuthService` y `AuditService`.
-5. Sustituir el login simulado por autenticación real.
-6. Aplicar RBAC en backend.
-7. Conectar KPIs del dashboard con datos del tenant autenticado.
+- autenticación real mediante IdP;
+- CRUD de tenants/sedes/usuarios;
+- socios y membresías;
+- pagos;
+- control de acceso;
+- POS;
+- información sensible.
+
+El siguiente incremento recomendado es terminar los **CRUD administrativos de Fase 1 + integración de identidad de producción**, antes de comenzar a cargar información real.

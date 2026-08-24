@@ -1,0 +1,26 @@
+@startuml
+skinparam componentStyle rectangle
+actor Usuario
+component "Frontend\nGitHub Pages" as Front
+component "ApiClient" as Client
+component "Apps Script Web App" as Api
+component "Router / Controllers" as Router
+component "Auth + Session + RBAC" as Security
+component "Domain Services" as Services
+component "Repository" as Repo
+database "Spreadsheet Plataforma" as Platform
+database "Spreadsheet Tenant A" as TenantA
+database "Spreadsheet Tenant B" as TenantB
+
+Usuario --> Front
+Front --> Client
+Client --> Api : HTTPS / JSON
+Api --> Router
+Router --> Security
+Router --> Services
+Services --> Repo
+Security --> Repo
+Repo --> Platform
+Repo --> TenantA : tenant desde sesión
+Repo --> TenantB : tenant desde sesión
+@enduml
