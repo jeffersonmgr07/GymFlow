@@ -6,15 +6,36 @@ const GF_Repository = Object.freeze({
     return SpreadsheetApp.openById(id);
   },
 
+  findTenantRecord: function (tenantId) {
+    return this.findOne(this.getPlatformSpreadsheet(), GF_PLATFORM_SHEETS.TENANTS, { tenant_id: tenantId });
+  },
+
   getTenantSpreadsheet: function (tenantId) {
-    const tenant = this.findOne(this.getPlatformSpreadsheet(), GF_PLATFORM_SHEETS.TENANTS, { tenant_id: tenantId, status: 'ACTIVE' });
-    if (!tenant) throw GF_Errors.notFound('Gimnasio no encontrado o suspendido.', 'TENANT_NOT_AVAILABLE');
+    const tenant = this.findTenantRecord(tenantId);
+    if (!tenant || tenant.status !== 'ACTIVE') throw GF_Errors.notFound('Gimnasio no encontrado o suspendido.', 'TENANT_NOT_AVAILABLE');
     return SpreadsheetApp.openById(tenant.spreadsheet_id);
   },
 
-  readAll: function (spreadsheet, sheetName) {
+  getTenantSpreadsheetAnyStatus: function (tenantId) {
+    const tenant = this.findTenantRecord(tenantId);
+    if (!tenant || !tenant.spreadsheet_id) throw GF_Errors.notFound('Gimnasio no encontrado.', 'TENANT_NOT_FOUND');
+    return SpreadsheetApp.openById(tenant.spreadsheet_id);
+  },
+
+  getSheet: function (spreadsheet, sheetName) {
     const sheet = spreadsheet.getSheetByName(sheetName);
     if (!sheet) throw GF_Errors.notFound('Hoja no encontrada: ' + sheetName, 'SHEET_NOT_FOUND');
+    return sheet;
+  },
+
+  headers: function (spreadsheet, sheetName) {
+    const sheet = this.getSheet(spreadsheet, sheetName);
+    if (sheet.getLastColumn() < 1) return [];
+    return sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(String);
+  },
+
+  readAll: function (spreadsheet, sheetName) {
+    const sheet = this.getSheet(spreadsheet, sheetName);
     const values = sheet.getDataRange().getValues();
     if (values.length < 2) return [];
     const headers = values[0].map(String);
@@ -41,9 +62,8 @@ const GF_Repository = Object.freeze({
   },
 
   append: function (spreadsheet, sheetName, record) {
-    const sheet = spreadsheet.getSheetByName(sheetName);
-    if (!sheet) throw GF_Errors.notFound('Hoja no encontrada: ' + sheetName, 'SHEET_NOT_FOUND');
-    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(String);
+    const sheet = this.getSheet(spreadsheet, sheetName);
+    const headers = this.headers(spreadsheet, sheetName);
     const row = headers.map(function (header) {
       const value = record[header];
       if (value === undefined || value === null) return '';
@@ -54,8 +74,8 @@ const GF_Repository = Object.freeze({
   },
 
   updateByField: function (spreadsheet, sheetName, idField, idValue, patch) {
-    const sheet = spreadsheet.getSheetByName(sheetName);
-    if (!sheet || sheet.getLastRow() < 2) return null;
+    const sheet = this.getSheet(spreadsheet, sheetName);
+    if (sheet.getLastRow() < 2) return null;
     const values = sheet.getDataRange().getValues();
     const headers = values[0].map(String);
     const idIndex = headers.indexOf(idField);
@@ -68,8 +88,32 @@ const GF_Repository = Object.freeze({
     });
     sheet.getRange(rowIndex + 1, 1, 1, headers.length).setValues([headers.map(function (header) {
       const value = updated[header];
+      if (value === undefined || value === null) return '';
       return typeof value === 'object' ? JSON.stringify(value) : value;
     })]);
     return updated;
+  },
+
+  updateMany: function (spreadsheet, sheetName, predicate, patchFactory) {
+    const sheet = this.getSheet(spreadsheet, sheetName);
+    if (sheet.getLastRow() < 2) return 0;
+    const values = sheet.getDataRange().getValues();
+    const headers = values[0].map(String);
+    let changed = 0;
+    const output = values.map(function (row, index) {
+      if (index === 0) return row;
+      const obj = {};
+      headers.forEach(function (header, i) { obj[header] = row[i]; });
+      if (!predicate(obj)) return row;
+      const patch = typeof patchFactory === 'function' ? patchFactory(obj) : patchFactory;
+      changed += 1;
+      return headers.map(function (header, i) {
+        const value = Object.prototype.hasOwnProperty.call(patch || {}, header) ? patch[header] : row[i];
+        if (value === undefined || value === null) return '';
+        return typeof value === 'object' ? JSON.stringify(value) : value;
+      });
+    });
+    if (changed) sheet.getRange(1, 1, output.length, headers.length).setValues(output);
+    return changed;
   }
 });

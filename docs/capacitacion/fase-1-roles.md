@@ -1,21 +1,40 @@
-# Notas de capacitación — Fase 1
+# Material acumulativo de capacitación — Fase 1
 
 ## Super Admin SaaS
 
-Objetivo de capacitación: comprender la diferencia entre administrar la plataforma y operar dentro de un gimnasio. Reforzar que un tenant es una unidad aislada y que soporte no implica acceso libre a datos sensibles.
+Objetivos de capacitación:
+
+- entender tenant vs sede;
+- crear y suspender gimnasios;
+- comprender límites de plan;
+- revisar matriz RBAC;
+- interpretar auditoría técnica;
+- no usar acceso de plataforma para consultar datos sensibles futuros.
 
 ## Propietario / Administrador
 
-Objetivo: reconocer el gimnasio y sede activos, interpretar KPI iniciales, cambiar la apariencia y entender que los módulos todavía marcados como demo se habilitarán por fases.
+Objetivos:
+
+- crear sedes;
+- crear personal;
+- asignar roles correctamente;
+- cambiar sede activa;
+- personalizar marca blanca;
+- revisar auditoría;
+- comprender que suspender conserva historial.
 
 ## Gerente de sede
 
-Objetivo: trabajar dentro del alcance de su sede y comprender que permisos y contexto se validan en backend.
+Objetivos:
 
-## Recepción / Caja
+- entender su sede asignada;
+- revisar usuarios y dashboard según permisos;
+- no asumir que ocultar un botón equivale a autorización.
 
-En esta fase solo dispone de un perfil de acceso demostrativo. La capacitación operativa de check-in, cobro rápido y caja se incorporará en Fases 3 y 4.
+## Conceptos clave para diapositivas
 
-## Mensaje transversal
-
-Nunca compartir tokens, credenciales o accesos. Si una operación aparece como denegada por permisos, debe escalarse al administrador en lugar de intentar modificar la URL o parámetros del navegador.
+1. Plataforma → Gimnasio → Sede → Usuario.
+2. Roles determinan permisos; backend toma la decisión final.
+3. Firebase valida identidad; GymFlow controla tenant, sede y autorización.
+4. Los registros históricos no se borran silenciosamente.
+5. Fase 2 añadirá socios y membresías sobre este núcleo.

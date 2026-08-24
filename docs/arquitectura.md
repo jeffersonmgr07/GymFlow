@@ -1,97 +1,79 @@
 # Arquitectura — GymFlow OS
 
-## Versión documentada
-
-- Aplicación: GymFlow OS
-- Versión: 0.2.0
-- Fase: 1 — Núcleo SaaS
-
-## Objetivo arquitectónico
-
-Separar presentación, contrato API, reglas de negocio y persistencia para que Google Sheets sea un almacenamiento de validación y no una dependencia directa de la UI.
+## Versión 0.3.0
 
 ```text
 GitHub Pages / Cloudflare Pages
-        ↓ HTTPS
-assets/js/api-client.js
-        ↓
-Apps Script Web App
-        ↓
-Router / Controllers
-        ↓
-Auth + Session + RBAC
-        ↓
-Domain Services
-        ↓
-Repository
-        ↓
-┌────────────────────────────┐
-│ Spreadsheet de plataforma │
-└────────────────────────────┘
-        ↓ resuelve tenant
-┌────────────────────────────┐
-│ Spreadsheet por gimnasio  │
-└────────────────────────────┘
+        │
+        ├── HTML/CSS/JS
+        ├── Firebase Auth (opcional/producción)
+        └── GymFlow ApiClient
+                │
+                ▼
+Google Apps Script Web App
+        │
+        ├── Router / Controllers
+        ├── Auth / Sessions
+        ├── RBAC
+        ├── Domain Services
+        ├── Audit
+        └── Repository
+                │
+                ├──────── Spreadsheet Plataforma
+                │          Tenants
+                │          Roles
+                │          Permissions
+                │          RolePermissions
+                │          Sessions
+                │          AuthIdentities
+                │          AuditLogs
+                │          Migrations
+                │
+                └──────── 1 Spreadsheet por tenant
+                           TenantSettings
+                           Branches
+                           Users
+                           UserRoles
+                           AuditLogs
+                           DashboardSnapshot
 ```
 
-## Aislamiento del piloto
+## Autenticación
 
-La plataforma mantiene un Spreadsheet maestro con:
+### Desarrollo
 
-- tenants;
-- roles;
-- permisos;
-- relaciones rol-permiso;
-- sesiones;
-- identidades demo;
-- auditoría de plataforma;
-- migraciones.
+`auth.demoLogin` usa identidades ficticias y genera una sesión opaca de Apps Script.
 
-Cada tenant obtiene un Spreadsheet separado con:
+### Producción
 
-- configuración;
-- sedes;
-- usuarios;
-- roles asignados;
-- auditoría del tenant;
-- snapshot de dashboard de Fase 1.
+```text
+Email / contraseña
+      ↓
+Firebase Authentication
+      ↓
+Firebase ID Token
+      ↓
+auth.firebaseLogin
+      ↓
+Identity Toolkit accounts:lookup
+      ↓
+AuthIdentities
+      ↓
+Usuario + tenant + roles
+      ↓
+Sesión opaca GymFlow
+```
 
-La UI no selecciona libremente el `tenantId` para consultar datos. El backend resuelve el tenant desde la sesión.
+La contraseña nunca se entrega a Apps Script.
 
-## Estructura de Apps Script
+## Aislamiento multitenant
 
-Apps Script no se trata como un runtime Node con módulos ES. Para mantener compatibilidad con `clasp`, los archivos `.gs` permanecen planos dentro de `apps-script/` y se numeran por responsabilidad:
+El contexto tenant se obtiene de la sesión. Los servicios tenant llaman `getTenantSpreadsheet(ctx.tenantId)`. El navegador no controla libremente el tenant operativo.
 
-- `00_Config.gs`
-- `01_Utils.gs`
-- `02_Response.gs`
-- `03_Repository.gs`
-- `04_RbacService.gs`
-- `05_SessionService.gs`
-- `06_TenantService.gs`
-- `07_BranchService.gs`
-- `08_UserService.gs`
-- `09_AuditService.gs`
-- `10_DashboardService.gs`
-- `11_AuthService.gs`
-- `12_Controllers.gs`
-- `13_Router.gs`
-- `14_Code.gs`
-- `90_Setup.gs`
-- `91_SeedDemo.gs`
-- `99_Tests.gs`
+## Administración de plataforma
 
-La numeración expresa la capa conceptual y facilita mantenimiento local.
+El Super Admin gestiona metadatos del tenant y su ciclo de vida desde el Spreadsheet maestro, sin recibir acceso automático a datos sensibles futuros de salud.
 
-## Estrategia de frontend
+## Sede activa
 
-`config.js` define dos modos:
-
-- `demo`: GitHub Pages funciona sin backend y usa datos ficticios locales.
-- `apps-script`: `api-client.js` usa el Web App para sesión, tenant y datos de Fase 1.
-
-No hay secretos en `config.js`.
-
-## Evolución prevista
-
-El repositorio genérico será reemplazable por un repositorio SQL sin cambiar el contrato de la UI. Los servicios deben continuar trabajando con objetos de dominio y no con números de fila de Sheets.
+El selector de sede usa `session.branch.switch`. El propietario puede cambiar entre sedes activas; otros roles quedan restringidos a su sede primaria en esta versión.

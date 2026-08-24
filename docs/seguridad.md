@@ -1,40 +1,34 @@
-# Seguridad — Fase 1
+# Seguridad — GymFlow OS Fase 1 v0.3.0
 
-## Implementado
+## Controles implementados
 
-- tenant resuelto desde la sesión;
-- Spreadsheet separado por tenant en el piloto;
-- permisos RBAC validados en backend;
-- token de sesión opaco y aleatorio;
-- almacenamiento únicamente del SHA-256 del token;
-- expiración de sesión;
-- revocación de sesión;
-- auditoría de login/logout;
-- errores uniformes sin stack trace al usuario;
-- correlation ID;
-- ningún secreto en GitHub;
-- ningún password almacenado en Sheets.
+- RBAC validado en backend.
+- Aislamiento de tenant desde sesión.
+- Spreadsheet separado por tenant en el piloto.
+- Tokens de sesión opacos, expirables y revocables.
+- Solo hash SHA-256 del token persistido.
+- Suspensión de tenant revoca sesiones tenant.
+- Suspensión de usuario revoca sesiones de usuario.
+- Cambio de roles revoca sesiones del usuario.
+- Cambio de matriz de permisos revoca sesiones que contienen el rol modificado.
+- IDs de negocio inmutables y no basados en fila.
+- Auditoría append-only.
+- Eliminación lógica mediante estados.
+- Firebase ID Token validado en backend antes de crear sesión GymFlow.
+- Contraseñas fuera de Google Sheets y Apps Script.
 
-## Modo demo
+## Firebase
 
-`auth.demoLogin` existe para probar arquitectura y datos ficticios. Solo funciona cuando Script Property `DEMO_MODE=true`.
+Apps Script valida el Firebase ID Token mediante `Identity Toolkit accounts:lookup`. La API key del backend se almacena en Script Properties. La configuración web de Firebase puede existir en frontend porque no representa una contraseña; aun así deben aplicarse restricciones de API key desde Google Cloud cuando corresponda.
 
-Antes de usar datos reales:
+## Pendiente antes de producción comercial
 
-1. cambiar `DEMO_MODE=false`;
-2. integrar Firebase Authentication, Google Identity u otro IdP aprobado;
-3. verificar el token del proveedor en backend;
-4. resolver usuario, tenant y roles desde fuentes internas;
-5. eliminar cualquier dependencia operativa de `DemoIdentities`.
-
-## Datos sensibles
-
-Fase 1 no almacena evaluaciones físicas, nutrición, biometría ni fotografías sensibles. Cuando esos módulos se incorporen necesitarán permisos explícitos adicionales y auditoría específica.
-
-## Limitaciones conocidas
-
-- Google Sheets no es una base transaccional de alta concurrencia.
-- La integridad append-only es una regla de aplicación; un propietario del archivo de Drive todavía puede editar manualmente una hoja. En producción avanzada se requerirá almacenamiento y controles más fuertes.
-- El Web App de Apps Script debe desplegarse con una configuración de acceso compatible con el frontend y validarse antes de producción.
-- El rate limiting fuerte todavía no está implementado.
-- CSRF y estrategia definitiva de autenticación dependen del proveedor de identidad elegido.
+- Deshabilitar login demo.
+- Configurar Firebase Auth real.
+- Restringir dominios autorizados de Firebase.
+- Revisar reglas de password/2FA según plan.
+- Añadir rate limiting persistente para endpoints de autenticación.
+- Añadir política de soporte temporal.
+- Pruebas de IDOR y cross-tenant automatizadas.
+- Backup y restauración probados.
+- Política de privacidad/consentimientos para Fase 7+.

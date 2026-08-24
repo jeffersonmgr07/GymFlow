@@ -1,52 +1,49 @@
-# Plan de pruebas — Fase 1
+# Plan de pruebas — Fase 1 v0.3.0
 
-## Smoke tests de backend
+## Pruebas de Apps Script
 
-Función: `runPhase1SmokeTests()`.
+### `runPhase1SmokeTests()`
 
-Prueba actualmente:
+Valida:
 
-1. existencia del Spreadsheet de plataforma;
-2. existencia de al menos dos tenants demo;
-3. almacenamiento separado por tenant;
-4. ausencia del usuario de Iron Factory en Ocean Fit;
-5. cajero sin permiso `user.read`;
-6. propietario con permiso `audit.read`.
+- plataforma existente;
+- al menos dos tenants demo;
+- Spreadsheets aislados;
+- ausencia de fuga de usuario entre tenants;
+- restricciones RBAC de cajero;
+- permisos administrativos de propietario.
 
-## Pruebas manuales frontend
+### `runPhase1CompletionTests()`
 
-### Modo estático
+Valida:
 
-- abrir `index.html`;
-- cambiar tema;
-- abrir `login.html`;
-- ingresar con perfiles demo;
-- navegar al dashboard;
-- verificar responsive móvil;
-- cerrar sesión.
+- migración `phase1_v030` registrada;
+- hoja `AuthIdentities` y vínculos pendientes;
+- nuevos permisos administrativos;
+- marca blanca persistente;
+- permisos de propietario;
+- permisos de Super Admin.
 
-### Modo Apps Script
+Resultado esperado:
 
-- configurar endpoint;
-- iniciar como `admin@gymflow.demo`;
-- comprobar creación de fila en `Sessions`;
-- comprobar que el token claro no aparece en Sheets;
-- comprobar evento de login en `AuditLogs`;
-- comprobar que el dashboard recupera KPI del snapshot;
-- cerrar sesión;
-- comprobar `status=REVOKED`;
-- intentar reutilizar token revocado y esperar `UNAUTHENTICATED`.
+```json
+{ "ok": true }
+```
 
-### Aislamiento
+## Prueba manual CRUD
 
-Con sesión Iron Factory, ninguna acción de tenant debe permitir consultar Ocean Fit enviando manualmente `tenantId=tenant_demo_ocean_fit` en `payload`. El servidor debe ignorarlo y resolver el contexto desde sesión.
+1. Entrar como Super Admin demo.
+2. Crear un gimnasio de prueba.
+3. Editarlo.
+4. Suspenderlo y reactivarlo.
+5. Entrar como propietario de Iron Factory.
+6. Crear una sede.
+7. Crear un usuario y asignar rol.
+8. Editar roles del usuario.
+9. Cambiar sede activa.
+10. Guardar marca blanca.
+11. Abrir auditoría y confirmar eventos.
 
-## Pendientes antes de datos reales
+## Criterio cross-tenant
 
-- pruebas automáticas de CRUD;
-- pruebas de concurrencia;
-- rate limiting;
-- sesión de producción con IdP;
-- pruebas de acceso cruzado por todos los endpoints;
-- restauración de backup;
-- pruebas de suspensión de tenant.
+Nunca se considera exitosa Fase 1 si un usuario de Iron Factory puede leer/modificar datos de Ocean Fit con su sesión tenant.

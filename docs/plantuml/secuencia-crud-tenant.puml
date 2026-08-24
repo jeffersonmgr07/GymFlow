@@ -1,0 +1,23 @@
+@startuml
+actor "Super Admin" as SA
+participant Frontend
+participant API
+participant RBAC
+participant TenantService
+participant "Spreadsheet Plataforma" as Platform
+participant Drive
+participant "Spreadsheet Tenant" as TenantSheet
+participant Audit
+
+SA -> Frontend: Crear gimnasio
+Frontend -> API: platform.tenants.create
+API -> RBAC: require platform.tenants.manage
+RBAC --> API: autorizado
+API -> TenantService: createPlatform
+TenantService -> Drive: crear Spreadsheet tenant
+TenantService -> Platform: registrar tenant
+TenantService -> TenantSheet: crear hojas + sede + propietario
+TenantService -> Audit: registrar tenant.create
+TenantService --> API: tenant creado
+API --> Frontend: respuesta OK
+@enduml

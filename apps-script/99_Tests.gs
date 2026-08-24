@@ -1,41 +1,31 @@
 /** Pruebas ejecutables manualmente desde Apps Script. No reemplazan un runner CI. */
 function runPhase1SmokeTests() {
-  const results = [];
-  function test(name, fn) {
-    try { fn(); results.push({ name:name, ok:true }); }
-    catch (error) { results.push({ name:name, ok:false, error:error.message, code:error.code || '' }); }
-  }
-  function assert(condition, message) { if (!condition) throw new Error(message); }
+  const results=[];
+  function test(name,fn){try{fn();results.push({name:name,ok:true});}catch(error){results.push({name:name,ok:false,error:error.message,code:error.code||''});}}
+  function assert(condition,message){if(!condition)throw new Error(message);}
 
-  test('setup disponible', function () {
-    const platform = GF_Repository.getPlatformSpreadsheet();
-    assert(Boolean(platform.getId()), 'No existe Spreadsheet plataforma.');
-  });
+  test('setup disponible',function(){const platform=GF_Repository.getPlatformSpreadsheet();assert(Boolean(platform.getId()),'No existe Spreadsheet plataforma.');});
+  test('dos tenants demo aislados',function(){const platform=GF_Repository.getPlatformSpreadsheet();const tenants=GF_Repository.readAll(platform,GF_PLATFORM_SHEETS.TENANTS);assert(tenants.length>=2,'Se esperaban al menos dos tenants.');assert(tenants[0].spreadsheet_id!==tenants[1].spreadsheet_id,'Los tenants no deben compartir Spreadsheet.');});
+  test('usuario Iron Factory no aparece en Ocean Fit',function(){const ironUser=GF_UserService.getByIdForTenant('tenant_demo_iron_factory','usr_demo_admin');const oceanLeak=GF_UserService.getByIdForTenant('tenant_demo_ocean_fit','usr_demo_admin');assert(Boolean(ironUser),'Usuario demo Iron no encontrado.');assert(oceanLeak===null,'Fuga de usuario entre tenants detectada.');});
+  test('RBAC cajero no puede listar usuarios',function(){const permissions=GF_RbacService.permissionsForRoles(['role_reception_cashier']);assert(permissions.indexOf('user.read')===-1,'El cajero no debería tener user.read en Fase 1.');});
+  test('RBAC propietario puede administrar usuarios y sedes',function(){const permissions=GF_RbacService.permissionsForRoles(['role_gym_owner']);assert(permissions.indexOf('user.manage')>=0,'El propietario debe administrar usuarios.');assert(permissions.indexOf('branch.manage')>=0,'El propietario debe administrar sedes.');});
+  Logger.log(JSON.stringify(results,null,2));
+  return {ok:results.every(function(r){return r.ok;}),results:results};
+}
 
-  test('dos tenants demo aislados', function () {
-    const platform = GF_Repository.getPlatformSpreadsheet();
-    const tenants = GF_Repository.readAll(platform, GF_PLATFORM_SHEETS.TENANTS);
-    assert(tenants.length >= 2, 'Se esperaban al menos dos tenants.');
-    assert(tenants[0].spreadsheet_id !== tenants[1].spreadsheet_id, 'Los tenants no deben compartir Spreadsheet.');
-  });
+function runPhase1CompletionTests() {
+  const results=[];
+  function test(name,fn){try{fn();results.push({name:name,ok:true});}catch(error){results.push({name:name,ok:false,error:error.message,code:error.code||''});}}
+  function assert(condition,message){if(!condition)throw new Error(message);}
+  const platform=GF_Repository.getPlatformSpreadsheet();
 
-  test('usuario Iron Factory no aparece en Ocean Fit', function () {
-    const ironUser = GF_UserService.getByIdForTenant('tenant_demo_iron_factory', 'usr_demo_admin');
-    const oceanLeak = GF_UserService.getByIdForTenant('tenant_demo_ocean_fit', 'usr_demo_admin');
-    assert(Boolean(ironUser), 'Usuario demo Iron no encontrado.');
-    assert(oceanLeak === null, 'Fuga de usuario entre tenants detectada.');
-  });
+  test('migración v0.3.0 registrada',function(){assert(Boolean(GF_Repository.findOne(platform,GF_PLATFORM_SHEETS.MIGRATIONS,{migration_id:'phase1_v030'})),'No está registrada phase1_v030.');});
+  test('AuthIdentities existe y contiene vínculos pendientes',function(){const rows=GF_Repository.readAll(platform,GF_PLATFORM_SHEETS.AUTH_IDENTITIES);assert(rows.length>=4,'Se esperaban identidades Firebase pendientes para usuarios demo.');});
+  test('permisos administrativos nuevos cargados',function(){const codes=GF_Repository.readAll(platform,GF_PLATFORM_SHEETS.PERMISSIONS).map(function(r){return r.code;});['platform.tenants.manage','user.manage','branch.manage','settings.manage','role.read'].forEach(function(code){assert(codes.indexOf(code)>=0,'Falta permiso '+code);});});
+  test('marca blanca persistente disponible',function(){const ss=GF_Repository.getTenantSpreadsheet('tenant_demo_iron_factory');const row=GF_Repository.findOne(ss,GF_TENANT_SHEETS.SETTINGS,{setting_id:'setting_branding'});assert(Boolean(row),'No existe setting_branding.');const branding=GF_Utils.safeJsonParse(row.value_json,{});assert(Boolean(branding.themeKey),'Branding sin themeKey.');});
+  test('matriz propietario incluye configuración y auditoría',function(){const permissions=GF_RbacService.permissionsForRoles(['role_gym_owner']);assert(permissions.indexOf('settings.manage')>=0,'Falta settings.manage.');assert(permissions.indexOf('audit.read')>=0,'Falta audit.read.');});
+  test('super admin puede gestionar tenants y matriz',function(){const permissions=GF_RbacService.permissionsForRoles(['role_platform_super_admin']);assert(permissions.indexOf('platform.tenants.manage')>=0,'Falta platform.tenants.manage.');assert(permissions.indexOf('platform.roles.manage')>=0,'Falta platform.roles.manage.');});
 
-  test('RBAC cajero no puede listar usuarios', function () {
-    const permissions = GF_RbacService.permissionsForRoles(['role_reception_cashier']);
-    assert(permissions.indexOf('user.read') === -1, 'El cajero no debería tener user.read en Fase 1.');
-  });
-
-  test('RBAC propietario puede leer auditoría', function () {
-    const permissions = GF_RbacService.permissionsForRoles(['role_gym_owner']);
-    assert(permissions.indexOf('audit.read') >= 0, 'El propietario debe poder leer auditoría.');
-  });
-
-  Logger.log(JSON.stringify(results, null, 2));
-  return { ok: results.every(function (r) { return r.ok; }), results: results };
+  Logger.log(JSON.stringify(results,null,2));
+  return {ok:results.every(function(r){return r.ok;}),results:results};
 }

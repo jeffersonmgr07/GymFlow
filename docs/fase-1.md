@@ -1,70 +1,63 @@
 # Fase 1 — Núcleo SaaS
 
-## Estado de la entrega 0.2.0
+## Estado de la entrega 0.3.0
 
-**Núcleo backend inicial implementado. La Fase 1 todavía no está cerrada para producción.**
+Con esta versión, Fase 1 queda funcionalmente cerrada a nivel de núcleo administrativo para continuar con Fase 2.
 
-La especificación maestra define:
+### Implementado
 
-- multi-gimnasio;
-- sedes;
-- usuarios;
-- login;
-- sesiones;
-- RBAC;
-- dashboard;
-- temas;
-- marca blanca;
-- auditoría base.
+1. Multi-gimnasio con Spreadsheet independiente por tenant.
+2. Sedes múltiples.
+3. Usuarios tenant.
+4. Sesiones opacas y revocables.
+5. RBAC validado en backend.
+6. CRUD lógico de gimnasios.
+7. CRUD lógico de sedes.
+8. CRUD lógico de usuarios.
+9. Asignación de roles.
+10. Matriz base de permisos.
+11. Suspensión/reactivación de tenants, sedes y usuarios.
+12. Configuración persistente del tenant.
+13. Marca blanca por design tokens.
+14. Selector real de sede que actualiza la sesión.
+15. Auditoría visual tenant y plataforma.
+16. Adaptador Firebase Authentication.
+17. Migración v0.2.x → v0.3.0 no destructiva.
+18. Pruebas smoke y completion.
 
-## Completado
+## Eliminación
 
-- [x] Sitio público inicial.
-- [x] Login demo.
-- [x] Dashboard administrativo.
-- [x] Dashboard inicial Super Admin SaaS.
-- [x] Responsive.
-- [x] Motor de temas.
-- [x] ApiClient con fallback estático.
-- [x] Contrato API uniforme.
-- [x] Spreadsheet maestro de plataforma mediante setup.
-- [x] Spreadsheet independiente por gimnasio mediante setup.
-- [x] IDs inmutables independientes de filas.
-- [x] `TenantService`.
-- [x] `BranchService`.
-- [x] `UserService`.
-- [x] `SessionService`.
-- [x] `RbacService`.
-- [x] `AuditService`.
-- [x] `DashboardService` demo.
-- [x] Sesiones expirables y revocables.
-- [x] Hash de token en almacenamiento.
-- [x] Resolución de tenant y sede desde sesión.
-- [x] Auditoría inicial append-only en servicios.
-- [x] Setup idempotente.
-- [x] Dos tenants demo físicamente separados.
-- [x] Smoke tests de aislamiento básicos.
-- [x] Documentación de arquitectura, seguridad, despliegue y pruebas.
+No existe borrado físico desde los CRUD. Se usan estados `ACTIVE` y `SUSPENDED` para preservar historial y trazabilidad.
 
-## Pendiente para cerrar Fase 1 de producción
+## Firebase
 
-- [ ] Firebase Authentication / Google Identity / IdP definitivo.
-- [ ] Deshabilitar y retirar login demo de entornos reales.
-- [ ] CRUD de gimnasios desde Super Admin.
-- [ ] CRUD de sedes.
-- [ ] CRUD de usuarios.
-- [ ] Editor de asignación de roles y permisos.
-- [ ] Configuración persistente completa de marca blanca.
-- [ ] Soporte SaaS temporal y auditado.
-- [ ] Suspensión/reactivación de tenant.
-- [ ] Rate limiting.
-- [ ] Más pruebas de acceso cruzado.
-- [ ] Backups/restauración operativos.
+La integración está implementada, pero se mantiene `FIREBASE_AUTH_ENABLED=false` hasta que el proyecto Firebase y sus propiedades estén configurados. El login demo puede mantenerse durante desarrollo.
 
-## Decisión de seguridad
+## Criterio de cierre de Fase 1
 
-No se implementa autenticación propia por contraseña. El backend demo solo existe para validar la arquitectura con datos ficticios. Producción debe delegar identidad a un proveedor seguro.
+Antes de iniciar Fase 2 deben pasar:
 
-## Criterio para pasar a Fase 2
+- `runPhase1SmokeTests()` → `ok: true`
+- `runPhase1CompletionTests()` → `ok: true`
+- acceso demo al Super Admin y Administrador vía Web App desplegado;
+- creación/edición de una sede de prueba;
+- creación/edición de un usuario de prueba;
+- cambio de sede del propietario;
+- visualización de auditoría;
+- persistencia de marca blanca.
 
-Podemos comenzar a diseñar socios y membresías con datos ficticios mientras terminamos los CRUD de Fase 1, pero no deben cargarse datos reales de socios hasta tener autenticación de producción y pruebas completas de aislamiento.
+## Siguiente fase
+
+Fase 2 incorporará:
+
+- Socios.
+- Planes.
+- Membresías.
+- Flex 14.
+- Ilimitados.
+- Congelamientos.
+- Renovaciones.
+- Carné digital.
+- QR / Code 128.
+
+Se recomienda incluir desde Fase 2 un Growth Core mínimo: lead → contacto → prueba → socio → membresía → pago, para alinear el producto con la propuesta comercial de crecimiento del gimnasio.

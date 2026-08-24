@@ -1,19 +1,25 @@
 # Manual acumulativo — Super Admin SaaS
 
-## Fase 1
+## Fase 1 v0.3.0
 
-La vista `super-admin/dashboard.html` muestra la capa de plataforma.
+El Super Admin puede:
 
-Perfil demo: `superadmin@gymflow.demo`.
+- ver gimnasios registrados;
+- crear un gimnasio con sede principal y propietario inicial;
+- editar metadatos del tenant;
+- suspender/reactivar un gimnasio;
+- revisar y editar la matriz base de permisos;
+- consultar auditoría técnica de plataforma.
 
-Funciones visibles en esta fase:
+### Crear gimnasio
 
-- cantidad de gimnasios;
-- lista de tenants;
-- estado;
-- tema configurado;
-- principios de seguridad del piloto.
+1. Abrir **Gimnasios**.
+2. Seleccionar **Nuevo gimnasio**.
+3. Completar nombre, plan SaaS, límites, tema y propietario inicial.
+4. Guardar.
 
-Los CRUD de gimnasio, planes SaaS, suspensión/reactivación y soporte temporal aún no están habilitados.
+El sistema crea automáticamente un Spreadsheet aislado para el tenant, una sede principal, el propietario y una identidad Firebase pendiente.
 
-El Super Admin no recibe acceso automático a datos sensibles de salud de los tenants.
+### Suspender gimnasio
+
+La suspensión no elimina datos. Revoca sesiones activas y bloquea el acceso operativo hasta su reactivación.

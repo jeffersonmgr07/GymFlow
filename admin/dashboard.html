@@ -14,7 +14,7 @@
   <div class="app-shell">
     <aside class="sidebar" data-sidebar>
       <div class="sidebar-head"><a class="brand" href="../index.html"><span class="brand-mark">GF</span><span class="brand-copy"><strong>GymFlow</strong><small>OS</small></span></a><button class="icon-btn sidebar-close" type="button" data-sidebar-close aria-label="Cerrar menú">×</button></div>
-      <div class="tenant-card"><span class="tenant-logo">IF</span><div><small>GIMNASIO</small><strong data-tenant-name>Iron Factory</strong><span data-branch-name>Sede Principal</span></div><button type="button" title="Cambiar sede" data-demo-only>⌄</button></div>
+      <div class="tenant-card"><span class="tenant-logo">IF</span><div><small>GIMNASIO</small><strong data-tenant-name>Iron Factory</strong><span data-branch-name>Sede Principal</span></div></div>
       <nav class="side-nav" aria-label="Menú administrativo">
         <span class="nav-label">GENERAL</span>
         <a class="active" href="dashboard.html"><i>⌂</i><span>Dashboard</span></a>
@@ -29,8 +29,12 @@
         <span class="nav-label">OPERACIÓN</span>
         <a href="#" data-demo-only><i>⚙</i><span>Equipos</span></a>
         <a href="#" data-demo-only><i>▤</i><span>Reportes</span></a>
-        <a href="#" data-demo-only><i>◇</i><span>Auditoría</span></a>
-        <a href="#" data-demo-only><i>⋯</i><span>Configuración</span></a>
+        <span class="nav-label">ADMINISTRACIÓN</span>
+        <a href="sedes.html"><i>⌂</i><span>Sedes</span></a>
+        <a href="usuarios.html"><i>♙</i><span>Usuarios</span></a>
+        <a href="permisos.html"><i>◆</i><span>Roles y permisos</span></a>
+        <a href="auditoria.html"><i>◇</i><span>Auditoría</span></a>
+        <a href="configuracion.html"><i>⋯</i><span>Configuración</span></a>
       </nav>
       <div class="sidebar-footer"><div class="sidebar-user"><span data-user-initials>JG</span><div><strong data-user-name>Administrador Demo</strong><small data-user-role>Administrador</small></div><button type="button" data-logout title="Cerrar sesión" aria-label="Cerrar sesión">↪</button></div></div>
     </aside>
@@ -38,7 +42,7 @@
     <div class="app-main">
       <header class="app-header">
         <div class="app-header-left"><button class="icon-btn mobile-sidebar-button" type="button" data-sidebar-open aria-label="Abrir menú">☰</button><div class="global-search"><span>⌕</span><input type="search" placeholder="Buscar socio, pago, acceso..." aria-label="Búsqueda global"><kbd>⌘ K</kbd></div></div>
-        <div class="app-header-actions"><button class="icon-btn" type="button" data-demo-only aria-label="Notificaciones">♢<b class="notification-dot"></b></button><button class="theme-mini-button" type="button" data-theme-cycle title="Cambiar tema"><i></i><span>Tema</span></button><div class="header-avatar">JG</div></div>
+        <div class="app-header-actions"><label class="branch-select-wrap"><span>Sede</span><select data-branch-selector aria-label="Sede activa"><option>Sede Principal</option></select></label><button class="icon-btn" type="button" data-demo-only aria-label="Notificaciones">♢<b class="notification-dot"></b></button><button class="theme-mini-button" type="button" data-theme-cycle title="Cambiar tema"><i></i><span>Tema</span></button><div class="header-avatar">JG</div></div>
       </header>
 
       <main class="dashboard-content">
@@ -72,7 +76,7 @@
           <article class="panel tasks-panel"><div class="panel-head"><div><span class="panel-kicker">HOY</span><h2>Alertas operativas</h2></div><span class="count-badge">4</span></div><div class="task-list"><button type="button" data-demo-only><span class="task-icon warning">!</span><div><strong>34 membresías por vencer</strong><small>Próximos 7 días</small></div><b>→</b></button><button type="button" data-demo-only><span class="task-icon danger">₴</span><div><strong>S/ 2,380 en deuda</strong><small>18 socios pendientes</small></div><b>→</b></button><button type="button" data-demo-only><span class="task-icon">⚙</span><div><strong>2 equipos en mantenimiento</strong><small>Revisar órdenes activas</small></div><b>→</b></button></div></article>
         </section>
 
-        <section class="demo-phase-note"><span>FASE 1 · PROTOTIPO</span><p>Por defecto esta pantalla usa datos ficticios. Al activar el API, el contexto tenant/sede y los KPI de Fase 1 se obtienen del backend con sesión y RBAC.</p><a href="../docs/fase-1.md">Ver alcance técnico →</a></section>
+        <section class="demo-phase-note"><span>FASE 1 · NÚCLEO ADMINISTRATIVO</span><p>La v0.3.0 añade CRUD de sedes/usuarios, roles, marca blanca, selector de sede y auditoría. Socios y membresías comienzan en Fase 2.</p><a href="../docs/fase-1.md">Ver alcance técnico →</a></section>
       </main>
     </div>
   </div>
@@ -81,6 +85,7 @@
   <div class="toast-container" aria-live="polite" data-toast-container></div>
   <script src="../assets/js/config.js"></script>
   <script src="../assets/js/api-client.js"></script>
+  <script src="../assets/js/firebase-auth.js"></script>
   <script src="../assets/js/demo-data.js"></script>
   <script src="../assets/js/app.js"></script>
 </body>

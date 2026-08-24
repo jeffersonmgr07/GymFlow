@@ -12,5 +12,5 @@ window.GYMFLOW_DEMO = {
     { initials: 'LP', name: 'Luis Pérez', plan: 'Vence hoy', time: '10:07', status: 'warning' },
     { initials: 'JA', name: 'Jorge Arias', plan: 'Membresía vencida', time: '09:58', status: 'denied' }
   ],
-  themes: ['iron', 'cyber', 'red', 'ocean']
+  themes: ['iron', 'cyber', 'red', 'ocean', 'stone']
 };

@@ -1,88 +1,71 @@
-# Despliegue — GymFlow OS 0.2.0
+# Despliegue — GymFlow OS 0.3.0
 
-## A. Frontend en GitHub Pages
+## Backend Apps Script con clasp
 
-Sube el contenido del repositorio a `main` y publica la raíz con GitHub Pages.
+### Instalación existente v0.2.x
 
-La configuración por defecto es segura para demostración estática:
+1. Conserva el archivo `.clasp.json` de tu carpeta local actual.
+2. Copia los nuevos archivos de `apps-script/` encima de esa carpeta.
+3. Desde Terminal:
 
-```js
-API_MODE: 'demo'
-API_BASE_URL: ''
-ENABLE_BACKEND_DEMO_LOGIN: false
+```bash
+clasp push
 ```
 
-## B. Crear proyecto Apps Script
+4. Abre Apps Script:
 
-Puedes crear un proyecto independiente en Google Apps Script y copiar los archivos de `apps-script/`, o usar `clasp`.
+```bash
+clasp open-script
+```
 
-### Con clasp
-
-1. Instala Node.js y `@google/clasp` localmente.
-2. Autentica `clasp` con tu cuenta Google.
-3. Crea o vincula un proyecto Apps Script.
-4. Copia `.clasp.example.json` a `.clasp.json` y coloca tu `scriptId`.
-5. Ejecuta `clasp push` desde `apps-script/`.
-
-`.clasp.json` está ignorado por Git.
-
-## C. Inicializar datos demo
-
-Desde el editor Apps Script ejecuta:
+5. Ejecuta:
 
 ```text
-setupGymFlowPhase1()
+migrateGymFlowPhase1ToV030
+runPhase1SmokeTests
+runPhase1CompletionTests
+getGymFlowSetupStatus
 ```
 
-La función crea de forma idempotente:
+No vuelvas a crear el proyecto Apps Script.
 
-- carpeta `GymFlow OS - Data Demo`;
-- Spreadsheet maestro de plataforma;
-- Spreadsheet de Iron Factory;
-- Spreadsheet de Ocean Fit Club;
-- encabezados;
-- roles;
-- permisos;
-- usuarios demo;
-- sedes;
-- snapshots demo.
+### Primera instalación
 
-Los IDs se guardan en Script Properties.
-
-## D. Probar backend
-
-Ejecuta:
+Después de `clasp push` ejecuta:
 
 ```text
-runPhase1SmokeTests()
+setupGymFlowPhase1
+runPhase1SmokeTests
+runPhase1CompletionTests
+getGymFlowSetupStatus
 ```
 
-Todos los tests deben resultar `ok: true` antes del despliegue.
+## Despliegue Web App
 
-## E. Publicar como Web App
+Cuando los tests terminen con `ok: true`:
 
-Crea un deployment de tipo Web App desde Apps Script. Copia la URL terminada en `/exec`.
-
-Primero prueba en el navegador:
-
-```text
-URL_DEL_WEB_APP?action=system.health
-```
-
-Debe responder JSON con `ok: true`.
-
-## F. Conectar GitHub Pages
-
-Edita `assets/js/config.js`:
+1. Apps Script → **Implementar / Deploy**.
+2. **Nueva implementación**.
+3. Tipo: **Aplicación web / Web app**.
+4. Ejecutar como: propietario del proyecto.
+5. Acceso: el nivel compatible con el frontend público utilizado durante el piloto.
+6. Copiar la URL `/exec`.
+7. En `assets/js/config.js`:
 
 ```js
 API_MODE: 'apps-script',
-API_BASE_URL: 'TU_URL_EXEC',
+API_BASE_URL: 'https://script.google.com/macros/s/DEPLOYMENT_ID/exec',
 ENABLE_BACKEND_DEMO_LOGIN: true
 ```
 
-Vuelve a publicar el frontend.
+Para pruebas de desarrollo se puede mantener login demo. Antes de producción debe deshabilitarse.
 
-## G. Antes de producción
+## Actualizaciones futuras
 
-No dejes `ENABLE_BACKEND_DEMO_LOGIN=true` ni `DEMO_MODE=true` cuando existan datos reales. La autenticación de producción todavía es un requisito pendiente de Fase 1.
+Cuando cambies archivos `.gs`:
+
+```bash
+clasp push
+```
+
+Si el cambio afecta el código del Web App, crea/actualiza la implementación con una nueva versión según el flujo de Apps Script para que la URL productiva use el código actualizado.

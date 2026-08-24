@@ -1,60 +1,56 @@
-# Ficha técnica — GymFlow OS
-
-## Identificación
+# Ficha técnica viva — GymFlow OS
 
 - Producto: GymFlow OS
-- Versión: 0.2.0
-- Fase: 1 — Núcleo SaaS
-- Mercado inicial: Perú y Latinoamérica
-- Arquitectura: SaaS multitenant y multisede
+- Arquitectura: SaaS multitenant / multisede
+- Backend piloto: Google Apps Script
+- Almacenamiento piloto: Google Sheets
+- Frontend: HTML5 + CSS3 + JavaScript Vanilla
+- Versión: 0.3.0
+- Fecha: 2026-08-23
 
-## Incremento 0.2.0
+## Incremento 0.3.0
 
-La versión 0.1.0 era un prototipo frontend. La 0.2.0 incorpora la primera capa backend real sobre Google Apps Script y Google Sheets, conservando el modo estático para GitHub Pages.
+La versión 0.3.0 completa el núcleo administrativo de Fase 1. Sobre la base v0.2.0 se añaden operaciones de administración reales, persistencia de configuración y una ruta de autenticación de producción mediante Firebase.
 
-## Frontend
+### Backend
 
-- HTML5
-- CSS3
-- JavaScript Vanilla
-- `config.js` para modo demo/API
-- `api-client.js` como adaptador HTTP
-- `app.js` para comportamiento y sincronización de UI
-- `sessionStorage` para token de sesión API
-- `localStorage` solo para preferencias y sesión ficticia del modo estático
+- `GF_TenantService`: alta, edición, suspensión y reactivación de tenants.
+- `GF_BranchService`: CRUD lógico de sedes.
+- `GF_UserService`: CRUD lógico de usuarios y roles.
+- `GF_RoleService`: catálogo y matriz base de permisos.
+- `GF_SettingsService`: configuración y marca blanca.
+- `GF_IdentityService`: vínculo proveedor externo ↔ usuario interno.
+- `GF_FirebaseAuthService`: validación de Firebase ID Token con Identity Toolkit.
+- `GF_SessionService`: revocación por tenant/usuario/rol y cambio de sede.
+- `GF_AuditService`: auditoría tenant y plataforma.
+- `92_Migrations.gs`: migración no destructiva v0.2.x → v0.3.0.
+- `93_AdminFunctions.gs`: diagnóstico y operación manual.
 
-## Backend
+### Frontend
 
-- Google Apps Script V8
-- router por acción;
-- respuestas uniformes;
-- repositorio genérico;
-- RBAC;
-- sesión opaca;
-- tenant/sede desde sesión;
-- auditoría;
-- setup idempotente;
-- smoke tests.
+Nuevas pantallas:
 
-## Almacenamiento piloto
+- `super-admin/gimnasios.html`
+- `super-admin/permisos.html`
+- `super-admin/auditoria.html`
+- `admin/sedes.html`
+- `admin/usuarios.html`
+- `admin/permisos.html`
+- `admin/configuracion.html`
+- `admin/auditoria.html`
 
-1 Spreadsheet de plataforma + 1 Spreadsheet por tenant.
+Nuevos scripts:
 
-Datos demo creados:
+- `firebase-auth.js`
+- `phase1-admin.js`
 
-- Iron Factory: 2 sedes.
-- Ocean Fit Club: 1 sede.
-- Super Admin SaaS.
-- propietario/administrador;
-- gerente;
-- recepción/caja.
+### Reglas críticas
 
-## Seguridad
-
-El token claro de sesión se entrega al navegador y se conserva en `sessionStorage`; Sheets almacena solo `SHA-256(token)`. Las sesiones expiran y pueden revocarse.
-
-No hay contraseñas reales ni secretos en el repositorio.
-
-## Restricción consciente
-
-`auth.demoLogin` es solo un mecanismo de laboratorio. No debe utilizarse con información real. El cierre de Fase 1 requiere proveedor de identidad externo.
+- No se acepta un `tenantId` libre para CRUD tenant.
+- Suspender tenant revoca sus sesiones.
+- Cambiar roles revoca sesiones del usuario.
+- Cambiar matriz base revoca sesiones que contienen el rol.
+- No hay eliminación física.
+- No se guardan contraseñas en Sheets.
+- La API key backend de Firebase se guarda en Script Properties.
+- La marca blanca se guarda como configuración y design tokens, no como CSS duplicado.

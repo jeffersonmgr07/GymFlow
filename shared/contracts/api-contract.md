@@ -1,23 +1,21 @@
-# Contrato API — GymFlow OS 0.2.0
+# Contrato API — GymFlow OS 0.3.0
 
-## Envelope de solicitud
+Todas las operaciones usan `POST` al Web App de Google Apps Script con `Content-Type: text/plain` y cuerpo JSON.
 
 ```json
 {
-  "action": "dashboard.summary",
+  "action": "branches.list",
   "payload": {},
   "sessionToken": "TOKEN_OPACO",
-  "requestId": "UUID_CLIENTE",
+  "requestId": "uuid-del-cliente",
   "client": {
-    "appVersion": "0.2.0",
-    "page": "admin-dashboard"
+    "appVersion": "0.3.0",
+    "page": "admin-branches"
   }
 }
 ```
 
-`sessionToken` no se envía para `system.health` ni `auth.demoLogin`.
-
-## Respuesta uniforme
+Respuesta uniforme:
 
 ```json
 {
@@ -29,21 +27,60 @@
 }
 ```
 
-## Acciones de Fase 1
+## Acciones anónimas
 
-| Acción | Sesión | Permiso | Uso |
-|---|---|---|---|
-| `system.health` | No | — | Verificación de despliegue |
-| `auth.demoLogin` | No | modo demo | Sesión ficticia de backend |
-| `auth.me` | Sí | — | Contexto actual |
-| `auth.logout` | Sí | — | Revocar sesión |
-| `tenant.current` | Sí | `tenant.read` | Tenant actual |
-| `platform.tenants.list` | Sí | `platform.tenants.read` | Super Admin |
-| `branches.list` | Sí | `branch.read` | Sedes del tenant |
-| `users.list` | Sí | `user.read` | Usuarios del tenant |
-| `dashboard.summary` | Sí | `dashboard.read` | Snapshot demo de Fase 1 |
-| `audit.list` | Sí | `audit.read` | Últimos eventos auditables |
+- `system.health`
+- `auth.demoLogin` — solo si `DEMO_MODE=true`.
+- `auth.firebaseLogin` — intercambia un Firebase ID Token validado por una sesión GymFlow.
 
-## Regla multitenant
+## Sesión
 
-Las acciones de tenant no aceptan un `tenantId` confiable desde el navegador. El backend toma `tenantId` y `branchId` de la sesión resuelta.
+- `auth.me`
+- `auth.logout`
+- `session.branch.switch`
+
+## Tenant actual
+
+- `tenant.current`
+- `tenant.settings.get`
+- `tenant.settings.update`
+
+## Super Admin SaaS
+
+- `platform.tenants.list`
+- `platform.tenants.get`
+- `platform.tenants.create`
+- `platform.tenants.update`
+- `platform.tenants.status`
+- `platform.permissions.matrix.update`
+
+## Sedes
+
+- `branches.list`
+- `branches.create`
+- `branches.update`
+- `branches.status`
+
+## Usuarios y RBAC
+
+- `users.list`
+- `users.create`
+- `users.update`
+- `users.status`
+- `users.roles.set`
+- `roles.list`
+- `permissions.matrix`
+
+## Dashboard y auditoría
+
+- `dashboard.summary`
+- `audit.list`
+
+## Reglas de seguridad relevantes
+
+- El `tenantId` operativo no se acepta libremente desde el navegador para operaciones tenant; se resuelve desde la sesión.
+- Las mutaciones validan RBAC en backend.
+- Suspender un tenant revoca sus sesiones activas.
+- Cambiar roles revoca las sesiones del usuario afectado.
+- Cambiar la matriz base revoca las sesiones que contengan el rol modificado.
+- No existe eliminación física en los CRUD de Fase 1; se usan estados `ACTIVE` / `SUSPENDED`.

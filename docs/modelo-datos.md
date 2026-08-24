@@ -1,82 +1,64 @@
-# Modelo de datos — Fase 1
+# Modelo de datos — Fase 1 v0.3.0
 
-## Principio
-
-Todos los IDs son inmutables y distintos del número de fila. Los timestamps se manejan en ISO 8601. Los registros históricos no deben borrarse silenciosamente.
-
-## Spreadsheet de plataforma
+## Plataforma
 
 ### Tenants
 
-Identifica cada gimnasio y la ubicación de su almacenamiento piloto.
-
-Campos principales: `tenant_id`, `name`, `slug`, `status`, `spreadsheet_id`, `theme_key`, `currency`, `locale`, `timezone`, timestamps y `version`.
+Incluye identidad, slug, estado, Spreadsheet, tema, moneda, locale, zona horaria, plan SaaS, límites, datos de suspensión y trazabilidad de creación/actualización.
 
 ### Roles / Permissions / RolePermissions
 
-Catálogo RBAC común. Los permisos usan códigos semánticos como:
-
-- `platform.tenants.read`
-- `tenant.read`
-- `branch.read`
-- `user.read`
-- `dashboard.read`
-- `audit.read`
-- `theme.manage`
-- `user.manage`
-- `branch.manage`
+Catálogo RBAC global. `RolePermissions` usa estado lógico `ACTIVE/INACTIVE` para conservar cambios históricos sin borrar filas.
 
 ### Sessions
 
-Guarda `token_hash`, nunca el token opaco en claro. Contiene el contexto de usuario, tenant, sede, roles, expiración y estado.
+El token completo nunca se persiste; se almacena SHA-256 del token. Incluye tenant, sede, roles, expiración y revocación.
 
-### DemoIdentities
+### AuthIdentities
 
-Directorio exclusivo del entorno demo para resolver correo → usuario/tenant/sede. No es el mecanismo de autenticación de producción.
+Vincula proveedor externo con usuario interno:
 
-### AuditLogs
+- provider
+- provider_uid
+- email
+- user_id
+- tenant_id
+- branch_id
+- status
+- bound_at
 
-Eventos de plataforma no asociados a un tenant, por ejemplo acceso del Super Admin.
+Permite que Firebase sea reemplazable sin convertir su UID en el ID de negocio del usuario.
 
-## Spreadsheet de tenant
+### AuditLogs / Migrations
+
+Auditoría técnica de plataforma y registro idempotente de migraciones.
+
+## Tenant
 
 ### TenantSettings
 
-Configuración de marca blanca y parámetros del gimnasio.
+Configuración por clave JSON. Fase 1 usa:
+
+- `branding`
+- `operations`
+- `localization`
 
 ### Branches
 
-Sedes pertenecientes al tenant. Toda fila contiene `tenant_id` aunque el archivo ya sea específico del gimnasio, como defensa adicional y apoyo a una futura migración SQL.
+Sedes con IDs inmutables, código, estado, timezone, dirección, teléfono y email.
 
 ### Users
 
-Usuarios administrativos iniciales de Fase 1. No contiene contraseñas.
+Usuario interno con tenant, sede primaria, email, nombre, estado y referencia opcional a proveedor de autenticación.
 
 ### UserRoles
 
-Asignación de roles por usuario y, cuando corresponde, sede.
+Asignaciones lógicas de roles. No se eliminan al desasignar; pasan a `INACTIVE`.
 
 ### AuditLogs
 
-Bitácora append-only del tenant desde la capa de servicios.
+Historial append-only de acciones tenant.
 
 ### DashboardSnapshot
 
-Datos ficticios de demostración utilizados exclusivamente para validar la conexión frontend/backend antes de implementar socios, pagos y accesos en sus fases correspondientes. No es la fuente final de KPI.
-
-## Datos que todavía NO pertenecen a Fase 1
-
-No se han creado aún las entidades operativas finales de:
-
-- socios;
-- membresías;
-- pagos;
-- check-ins;
-- caja;
-- CRM;
-- rutinas;
-- clases;
-- nutrición;
-- mantenimiento.
-
-Se incorporarán según el roadmap maestro para evitar mezclar módulos sin reglas terminadas.
+Datos demo de indicadores hasta que los módulos reales de Socios/Pagos/Accesos generen agregados.

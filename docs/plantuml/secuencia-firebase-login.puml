@@ -1,0 +1,21 @@
+@startuml
+actor Usuario
+participant "Frontend GymFlow" as FE
+participant "Firebase Auth" as FB
+participant "Apps Script API" as API
+participant "Identity Toolkit" as IT
+participant "AuthIdentities" as AI
+participant "SessionService" as SS
+
+Usuario -> FE: email + contraseña
+FE -> FB: signInWithEmailAndPassword
+FB --> FE: Firebase ID Token
+FE -> API: auth.firebaseLogin(idToken)
+API -> IT: accounts:lookup(idToken)
+IT --> API: uid + email verificados
+API -> AI: resolver/bind identity
+AI --> API: userId + tenantId + branchId
+API -> SS: crear sesión opaca
+SS --> API: sessionToken
+API --> FE: usuario + tenant + roles + permisos
+@enduml

@@ -1,16 +1,19 @@
 /**
  * GymFlow OS — configuración pública del frontend.
- *
- * IMPORTANTE:
- * - Este archivo puede versionarse en GitHub porque NO debe contener secretos.
- * - La URL de un Web App de Apps Script es un endpoint público, no una credencial.
- * - API_MODE="demo" mantiene el prototipo 100% estático.
- * - API_MODE="apps-script" activa el cliente HTTP hacia el backend.
+ * No colocar secretos aquí. La configuración web de Firebase es pública por diseño;
+ * los valores sensibles del backend se guardan en Apps Script > Script Properties.
  */
 window.GYMFLOW_CONFIG = Object.freeze({
   API_MODE: 'demo', // 'demo' | 'apps-script'
-  API_BASE_URL: 'https://script.google.com/macros/s/AKfycby-S45qvBcK0h2X9LDcc3fFuLQr24-xmDzPq4btA6pO9EZrqYM-ceNoIiUcbCtJVlOnug/exec', // Ej.: https://script.google.com/macros/s/DEPLOYMENT_ID/exec
+  API_BASE_URL: '', // https://script.google.com/macros/s/DEPLOYMENT_ID/exec
   ENABLE_BACKEND_DEMO_LOGIN: false,
-  REQUEST_TIMEOUT_MS: 12000,
-  APP_VERSION: '0.2.0'
+  REQUEST_TIMEOUT_MS: 15000,
+  APP_VERSION: '0.3.0',
+  FIREBASE: Object.freeze({
+    enabled: false,
+    apiKey: '',
+    authDomain: '',
+    projectId: '',
+    appId: ''
+  })
 });

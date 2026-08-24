@@ -1,16 +1,22 @@
 /** Resolución centralizada de RBAC. */
 const GF_RbacService = Object.freeze({
+  cacheKeyForRoles: function (roleIds) {
+    const version = PropertiesService.getScriptProperties().getProperty(GF_CONFIG.RBAC_VERSION_PROP) || '1';
+    return 'rbac:' + version + ':' + GF_Utils.sha256Hex((roleIds || []).map(String).sort().join('|')).slice(0, 32);
+  },
+
   permissionsForRoles: function (roleIds) {
     const ids = (roleIds || []).map(String);
     if (!ids.length) return [];
     const cache = CacheService.getScriptCache();
-    const cacheKey = 'rbac:' + GF_Utils.sha256Hex(ids.sort().join('|')).slice(0, 32);
+    const cacheKey = this.cacheKeyForRoles(ids);
     const cached = cache.get(cacheKey);
     if (cached) return GF_Utils.safeJsonParse(cached, []);
 
     const ss = GF_Repository.getPlatformSpreadsheet();
     const links = GF_Repository.readAll(ss, GF_PLATFORM_SHEETS.ROLE_PERMISSIONS).filter(function (row) {
-      return ids.indexOf(String(row.role_id)) >= 0;
+      const active = !row.status || row.status === 'ACTIVE';
+      return active && ids.indexOf(String(row.role_id)) >= 0;
     });
     const permissionIds = links.map(function (row) { return String(row.permission_id); });
     const permissions = GF_Repository.readAll(ss, GF_PLATFORM_SHEETS.PERMISSIONS)
@@ -19,6 +25,13 @@ const GF_RbacService = Object.freeze({
     const unique = Array.from(new Set(permissions));
     cache.put(cacheKey, JSON.stringify(unique), GF_CONFIG.CACHE_TTL_SECONDS);
     return unique;
+  },
+
+  bumpVersion: function () {
+    const props = PropertiesService.getScriptProperties();
+    const current = Number(props.getProperty(GF_CONFIG.RBAC_VERSION_PROP) || 1);
+    props.setProperty(GF_CONFIG.RBAC_VERSION_PROP, String(current + 1));
+    return current + 1;
   },
 
   require: function (ctx, permission) {

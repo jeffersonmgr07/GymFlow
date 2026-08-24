@@ -1,19 +1,38 @@
-# Manual acumulativo — Administrador del gimnasio
+# Manual acumulativo — Propietario / Administrador
 
-## Fase 1
+## Fase 1 v0.3.0
 
-El administrador puede entrar al dashboard demo y visualizar el contexto de gimnasio/sede. Cuando el API está activo, la pantalla recupera el tenant, sede y KPI demo desde el backend.
+### Sedes
 
-### Acceso demo
+Permite crear, editar, suspender y reactivar sedes según el límite del plan SaaS.
 
-Perfil de ejemplo: `admin@gymflow.demo`.
+### Usuarios
 
-La contraseña mostrada en pantalla es decorativa. No representa un password de producción.
+Permite crear usuarios, definir sede primaria, asignar uno o varios roles, suspender/reactivar y preparar vinculación con Firebase.
 
-### Cambio de tema
+No se crean ni almacenan contraseñas en Google Sheets.
 
-El botón **Tema** recorre las variantes visuales implementadas. La preferencia se conserva localmente en el navegador. En una fase posterior la configuración oficial del tenant se administrará desde Configuración.
+### Roles y permisos
 
-### Seguridad visible para el usuario
+El administrador puede consultar la matriz base. La edición global corresponde al Super Admin SaaS.
 
-El administrador solo debe acceder al tenant asociado a su sesión. No debe poder cambiar de gimnasio modificando parámetros del navegador.
+### Configuración
+
+Permite guardar:
+
+- nombre de marca;
+- eslogan;
+- URLs de logos/favicon;
+- tema;
+- colores personalizados;
+- moneda;
+- locale;
+- zona horaria.
+
+### Selector de sede
+
+El propietario puede cambiar la sede activa desde el encabezado. La sesión actualiza su `branchId` y las pantallas siguientes utilizan ese contexto.
+
+### Auditoría
+
+Muestra eventos críticos con fecha, acción, usuario, entidad, resultado y detalle JSON.
